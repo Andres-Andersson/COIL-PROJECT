@@ -40,7 +40,7 @@ typedef struct
 typedef struct
 {
 	int type; //Each type will lead to an if condition, create #define for each power type
-	int duration;
+	int duration; // Power-up time duration
 }powers_t;
 
 #endif /* ENTITIES_H_ */

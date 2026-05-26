@@ -19,13 +19,9 @@ int main(void){
 	int valid_user;
 	//int level = 1;
 	int mode;
+	Terminal original_termios;
 
-
-	Terminal original_termios; //termios struct with the default settings
-	tcgetattr(STDIN_FILENO, &original_termios);
-
-
-	printf("\nHi there!\nPlease enter your username to start playing!\n");
+	printf("Hi there!\nPlease enter your username to start playing!\n");
 
 	do //We save and verify the username
 	{
@@ -44,7 +40,6 @@ int main(void){
 	printf("Welcome to Arkanoid in C, %s!\n", username);
 
 	mode = display_menu(&original_termios);
-	CLEAR_SCREEN;
 
 	if (mode == PLAY){
 		printf("Get ready\n");
@@ -67,7 +62,7 @@ int validate_username(const char*username){
 
 	for (int i=0; i<length;i++){
 		char letter = username[i];
-		if (!isalpha(letter) || isspace(letter)){
+		if (!isalpha(letter)){
 			return INVALID_USER;
 		}
 	}

@@ -8,7 +8,7 @@
 #ifndef ENTITIES_H_
 #define ENTITIES_H_
 
-#define LIFE_MBALL -1
+#define LIFE_MBALL -10
 #define LIFE_EBALL 1
 typedef struct 
 {

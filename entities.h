@@ -8,15 +8,17 @@
 #ifndef ENTITIES_H_
 #define ENTITIES_H_
 
-#define LIFE_MBALL -10
-#define LIFE_EBALL 100
+#include <stdlib.h>
+#include <time.h>
+
 typedef struct 
 {
 	int x;
 	int y;
 	int hp;
 	int type;
-}bloque_t;
+}brick_t;
+//TYPE 1= COMMON
 
 typedef struct 
 {
@@ -27,7 +29,7 @@ typedef struct
 	int hp; //LIFE_MBALL for the main, LIFE_E_BALL for the extras.
 	float speed;
 	
-}bola_t;
+}bowl_t;
 
 typedef struct
 {
@@ -43,4 +45,20 @@ typedef struct
 	int duration; // Power-up time duration
 }powers_t;
 
+typedef struct
+{
+	int level;
+	int speed_mult;
+}level_t;
+
+//CONSTANTS
+#define ROWS 16
+#define COLS 16
+#define gameboard (ROWS * COLS)
+#define BR_ROWS 5
+#define BR_BOARD (COLS * BR_ROWS)
+#define LIFE_MBALL -10 //So that it never disapears if touches many blocks in the same time, condition <=0 && >-10
+#define LIFE_EBALL 1
+
 #endif /* ENTITIES_H_ */
+

@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
+#include <entities.h>
 #include "menu.h"
 
 
@@ -14,43 +11,11 @@
 int validate_username(const char*);
 
 int main(void){
+	srand (time(NULL));
+	brick_t bricks[BR_BOARD]={0};
+	brick_init(bricks[]);
 
-	char username[MAX_USERNAME+2]; //We make sure that nor the enter nor the terminating character get clipped
-	int valid_user;
-	//int level = 1;
-	int mode;
-	Terminal original_termios;
-
-	printf("Hi there!\nPlease enter your username to start playing!\n");
-
-	do //We save and verify the username
-	{
-		if(fgets(username, sizeof(username), stdin) != NULL){
-			username[strcspn(username, "\n")] = 0; //We replace the \n by a terminating character
-		}
-		valid_user = validate_username(username);
-		if (!valid_user){
-			printf("Invalid username, please try again\n");
-		}
-		usleep(SLEEP_TIME);
 	}
-
-	while(!valid_user); //We will prompt the user again until the username becomes valid
-
-	printf("Welcome to Arkanoid in C, %s!\n", username);
-
-	mode = display_menu(&original_termios);
-
-	if (mode == PLAY){
-		printf("Get ready\n");
-
-		//Call a function to initilize the game.
-	}
-	else if (mode==QUIT){
-		printf("Thank you for playing\n");
-	}
-
-
 	return 0;
 }
 
@@ -71,3 +36,40 @@ int validate_username(const char*username){
 
 }
 
+void gauss (void)
+{
+	char username[MAX_USERNAME+2]; //We make sure that nor the enter nor the terminating character get clipped
+		int valid_user;
+		//int level = 1;
+		int mode;
+		Terminal original_termios;
+
+		printf("Hi there!\nPlease enter your username to start playing!\n");
+
+		do //We save and verify the username
+		{
+			if(fgets(username, sizeof(username), stdin) != NULL){
+				username[strcspn(username, "\n")] = 0; //We replace the \n by a terminating character
+			}
+			valid_user = validate_username(username);
+			if (!valid_user){
+				printf("Invalid username, please try again\n");
+			}
+			usleep(SLEEP_TIME);
+		}
+
+		while(!valid_user); //We will prompt the user again until the username becomes valid
+
+		printf("Welcome to Arkanoid in C, %s!\n", username);
+
+		mode = display_menu(&original_termios);
+
+		if (mode == PLAY){
+			printf("Get ready\n");
+
+			//Call a function to initilize the game.
+		}
+		else if (mode==QUIT){
+			printf("Thank you for playing\n");
+		}
+}

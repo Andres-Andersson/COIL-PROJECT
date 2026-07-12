@@ -9,7 +9,7 @@
 #define ENTITIES_H_
 
 #define LIFE_MBALL -10
-#define LIFE_EBALL 1
+#define LIFE_EBALL 100
 typedef struct 
 {
 	int x;
@@ -24,7 +24,7 @@ typedef struct
 	int y;
 	int dx;
 	int dy;
-	int hp; //LIFE_MBALL for the main, LIFE_E_BALL for the extras
+	int hp; //LIFE_MBALL for the main, LIFE_E_BALL for the extras.
 	float speed;
 	
 }bola_t;

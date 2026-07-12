@@ -12,10 +12,14 @@ int validate_username(const char*);
 
 int main(void){
 	srand (time(NULL));
+	level_t level;
+	level_init (&level);
 	brick_t bricks[BR_BOARD]={0};
-	brick_init(bricks[]);
+	brick_init (bricks[0]);
+	ball_t m_ball;
+	paddle_t paddle;
+	pad_ball_init (&m_ball, &paddle);
 
-	}
 	return 0;
 }
 

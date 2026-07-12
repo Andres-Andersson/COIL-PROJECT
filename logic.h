@@ -8,7 +8,7 @@
 #ifndef LOGIC_H_
 #define LOGIC_H_
 
-void init_level (level_t level_info, brick_t bricks[]);
+void init_new_level (level_t level_info, brick_t bricks[]);
 void init_level_1 (brick_t bricks[]);
 void init_level_2 (brick_t bricks[]);
 void init_level_n (brick_t bricks[]);

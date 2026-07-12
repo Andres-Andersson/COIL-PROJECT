@@ -18,7 +18,12 @@ void pad_ball_init (ball_t *pball, paddle_t *ppaddle)
 
 }
 
-void init_level (level_t level_info, brick_t bricks[])
+void level_init (level_t *level)
+{
+
+}
+
+void init_new_level (level_t level_info, brick_t bricks[])
 {
 	switch (level_info)
 	{

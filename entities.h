@@ -29,7 +29,7 @@ typedef struct
 	int hp; //LIFE_MBALL for the main, LIFE_E_BALL for the extras.
 	float speed;
 	
-}bowl_t;
+}ball_t;
 
 typedef struct
 {
@@ -48,6 +48,7 @@ typedef struct
 typedef struct
 {
 	int level;
+	int lives;
 	int speed_mult;
 }level_t;
 

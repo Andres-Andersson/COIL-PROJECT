@@ -1,5 +1,6 @@
-#include <entities.h>
+#include "entities.h"
 #include "menu.h"
+#include "logic.h"
 
 
 #define MIN_USERNAME 2
@@ -12,14 +13,19 @@ int validate_username(const char*);
 
 int main(void){
 	srand (time(NULL));
-	level_t level;
-	level_init (&level);
+
+	level_t level_stats;
+	level_init (&level_stats);
+
 	brick_t bricks[BR_BOARD]={0};
-	brick_init (bricks[0]);
+	brick_init (bricks);
+	init_new_level (&level_stats, bricks);
+
 	ball_t m_ball;
 	paddle_t paddle;
-	pad_ball_init (&m_ball, &paddle);
+	pad_ball_init (&m_ball, &paddle, &level_stats);
 
+    game_loop(&m_ball, &paddle, bricks, &level_stats);
 	return 0;
 }
 

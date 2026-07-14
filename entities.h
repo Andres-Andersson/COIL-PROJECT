@@ -18,6 +18,7 @@ typedef struct
 	int hp;
 	int type;
 	int score;
+	char key;
 }brick_t;
 //TYPE 1= COMMON
 
@@ -51,23 +52,24 @@ typedef struct
 {
 	int level;
 	int lives;
-	int speed_mult;
+	float speed_mult;
 	int score;
-	int score_mult;
+	float score_mult;
 	int ball_count;
 }level_t;
 
 //CONSTANTS
 //GAMEBOARD
-#define ROWS 41 //LOSES IN THE 17TH, Arrays from 0to ROWS-1
-#define COLS 41 //ODD NUMBER TO CENTER PADDLE
+#define ROWS 30 //LOSES IN THE N, Arrays from 0to ROWS-1
+#define COLS 15 //ODD NUMBER TO CENTER PADDLE
 #define gameboard (ROWS * COLS)
-#define BR_ROWS 25
+#define BR_ROWS 10
 #define BR_BOARD (COLS * BR_ROWS)
 
 //GAME
 #define INITIAL_LIVES 3
-#define BASE_SPEED 50
+#define BASE_SPEED 4
+#define MAX_LEVEL 10
 
 //BALL & PADDLE
 #define LIFE_BALL 1 //So that it never disapears if touches many blocks in the same time, condition <=0 && >-10
@@ -78,6 +80,33 @@ typedef struct
 //KEYS
 #define LEFT 'a'
 #define RIGHT 'd'
+
+// Brick types
+#define BR_TYPE_1 1   // common
+#define BR_TYPE_2 2   // medium
+#define BR_TYPE_3 3   // hard
+#define BR_TYPE_4 4   // power-up A
+#define BR_TYPE_5 5   // power-up B
+#define BR_TYPE_6 6   // power-up C
+#define BR_TYPE_7 7   // power-up D
+
+// Brick visual keys
+#define BR_KEY_1 '-'
+#define BR_KEY_2 '='
+#define BR_KEY_3 '#'
+#define BR_KEY_4 '$'
+#define BR_KEY_5 '&'
+#define BR_KEY_6 '%'
+#define BR_KEY_7 '?'
+
+// Brick scores
+#define BR_SCORE_1 100
+#define BR_SCORE_2 250
+#define BR_SCORE_3 500
+#define BR_SCORE_4 150
+#define BR_SCORE_5 150
+#define BR_SCORE_6 150
+#define BR_SCORE_7 150
 
 // MENU DISPLAY (GAUSS WILL CHECK)
 #define US_SECOND 1000000

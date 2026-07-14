@@ -43,7 +43,7 @@ void level_init (level_t *plevel)
 {
 	plevel->level=1;
 	plevel->lives= INITIAL_LIVES;
-	plevel->speed_mult=BASE_SPEED;
+	plevel->speed_mult=1;
 	plevel->score=0;
 	plevel->ball_count=1;
 	plevel->score_mult=1;
@@ -59,39 +59,85 @@ void init_new_level (level_t *level_info, brick_t bricks[])
 	}
 
 }
-void init_level_1 (brick_t bricks[])
+void init_level_1(brick_t bricks[])
 {
-	int i=0;
-	for (;i<(BR_BOARD);i++)
-	{
-		bricks[i].hp=1;
-		bricks[i].type=1;
-		bricks[i].score=1;
-	}
+    int i, row, col;
+
+    for (row = 0; row < BR_ROWS; row++)
+    {
+        for (col = 0; col < COLS; col++)
+        {
+            i = row * COLS + col;
+            bricks[i].hp = 0; // empty by default
+
+            if (row == 0 || row == 2 || row == 6 || row == 8)
+            {
+                set_brick(&bricks[i], BR_TYPE_1);
+            }
+            else if (row == 3 || row == 5)
+            {
+                set_brick(&bricks[i], BR_TYPE_2);
+            }
+            else if (row == 4)
+            {
+                if      (col == 4)  { set_brick(&bricks[i], BR_TYPE_4); }
+                else if (col == 10) { set_brick(&bricks[i], BR_TYPE_5); }
+                else                { set_brick(&bricks[i], BR_TYPE_2); }
+            }
+            // rows 1, 7, 9 → stay empty (hp=0)
+        }
+    }
 }
 
-void init_level_2 (brick_t bricks[])
+void init_level_2(brick_t bricks[])
 {
-	//MODIFICAR
-	int i=0;
-		for (;i<(BR_BOARD);i++)
-		{
-			bricks[i].hp=1;
-			bricks[i].type=1;
-			bricks[i].score=1;
-		}
+    int i = 0;
+    for (; i < BR_BOARD; i++)
+    {
+        set_brick(&bricks[i], BR_TYPE_1); // modify later
+    }
 }
 
-void init_level_n (brick_t bricks[])
+void init_level_n(brick_t bricks[])
 {
-	//SEE LOGIC AND MODIFY
-	int i=0;
-		for (;i<(BR_BOARD);i++)
-		{
-			bricks[i].hp=1;
-			bricks[i].type=1;
-			bricks[i].score=1;
-		}
+    int i = 0;
+    for (; i < BR_BOARD; i++)
+    {
+        set_brick(&bricks[i], BR_TYPE_1); // randomize later
+    }
+}
+
+void set_brick(brick_t *brick, int type)
+{
+    brick->type = type;
+    switch(type)
+    {
+        case BR_TYPE_1: brick->hp=1; brick->score=BR_SCORE_1; brick->key=BR_KEY_1; break;
+        case BR_TYPE_2: brick->hp=2; brick->score=BR_SCORE_2; brick->key=BR_KEY_2; break;
+        case BR_TYPE_3: brick->hp=3; brick->score=BR_SCORE_3; brick->key=BR_KEY_3; break;
+        case BR_TYPE_4: brick->hp=1; brick->score=BR_SCORE_4; brick->key=BR_KEY_4; break;
+        case BR_TYPE_5: brick->hp=1; brick->score=BR_SCORE_5; brick->key=BR_KEY_5; break;
+        case BR_TYPE_6: brick->hp=1; brick->score=BR_SCORE_6; brick->key=BR_KEY_6; break;
+        case BR_TYPE_7: brick->hp=1; brick->score=BR_SCORE_7; brick->key=BR_KEY_7; break;
+        default:        brick->hp=1; brick->score=BR_SCORE_1; brick->key=BR_KEY_1; break;
+    }
+}
+
+void update_brick_key(brick_t *brick)
+{
+    if (brick->type > BR_TYPE_3)
+    {
+    	return; // power-ups keep their key
+    }
+
+    if      (brick->hp == 2)
+    {
+    	brick->key = BR_KEY_2;
+    }
+    else if (brick->hp == 1)
+    {
+    	brick->key = BR_KEY_1;
+    }
 }
 
 void update_paddle(paddle_t *ppaddle, char key)
@@ -137,8 +183,6 @@ void update_ball(ball_t *pball)
     // UP BOUNCE WITH WALLS
     if (pball->y <= 0)        { pball->y = 0;         pball->dy =  1; }
 
-    // DOWN, NOW BOUNCES, THEN LOSES LIFE
-    if (pball->y >= ROWS - 1) { pball->y = ROWS - 1;  pball->dy = -1; }
 }
 
 void check_paddle_collision(ball_t *pball, paddle_t *ppaddle)
@@ -166,28 +210,69 @@ void check_paddle_collision(ball_t *pball, paddle_t *ppaddle)
     }
 }
 
-void check_brick_collision(ball_t *pball, brick_t bricks[])
+void check_brick_collision(ball_t *pball, brick_t bricks[], level_t *plevel)
 {
+    int mid_x = pball->x - (pball->dx / 2);
+    int mid_y = pball->y;
+
     for (int i = 0; i < BR_BOARD; i++)
     {
-        if (bricks[i].hp <= 0) continue; //Hole, no brick
+        if (bricks[i].hp <= 0) { continue; }
 
-        if (pball->x == bricks[i].x && pball->y == bricks[i].y) //BRICK
-        	//SUMAR PUNTAJE
+        int hit     = (pball->x == bricks[i].x && pball->y == bricks[i].y);
+        int hit_mid = ((pball->dx == 2 || pball->dx == -2) &&
+                        mid_x == bricks[i].x && mid_y == bricks[i].y);
+
+        if (hit || hit_mid)
         {
-            bricks[i].hp--; //-1 LIFE
+            bricks[i].hp--;
 
-            //BOUNCE: Up-Down or Left-Right
+            if (bricks[i].hp <= 0)
+            {
+                plevel->score += bricks[i].score * plevel->score_mult;
+            }
+            else
+            {
+                update_brick_key(&bricks[i]); // Update visual damage
+            }
+
+            // Bounce
             int prev_y = pball->y - pball->dy;
 
             if (prev_y == bricks[i].y)
-                {pball->dx = -pball->dx;}  //LEFT- RIGHT
+            {
+                pball->dx = -pball->dx; // lateral impact
+            }
             else
-                pball->dy = -pball->dy;  //UP-DOWN
+            {
+                pball->dy = -pball->dy; // top/bottom impact
+            }
 
-            break;
+            return; // one brick per frame
         }
     }
+}
+
+int check_ball_lost(ball_t *pball, paddle_t *ppaddle, level_t *plevel)
+{
+    if (pball->y >= ROWS)
+    {
+        plevel->lives--;
+        if (plevel->lives <= 0) { return -1; } // game over
+
+        pad_ball_init(pball, ppaddle, plevel); // reset ball and paddle
+        return 1; // lost a life, continue
+    }
+    return 0; // normal
+}
+
+int check_level_complete(brick_t bricks[])
+{
+    for (int i = 0; i < BR_BOARD; i++)
+    {
+        if (bricks[i].hp > 0) { return 0; }
+    }
+    return 1; // all bricks destroyed
 }
 
 void game_loop(ball_t *pball, paddle_t *ppaddle, brick_t bricks[], level_t *plevel)
@@ -223,16 +308,46 @@ void game_loop(ball_t *pball, paddle_t *ppaddle, brick_t bricks[], level_t *plev
         else if (frame % (int)(BASE_SPEED / pball->speed) == 0)
         {
             update_ball(pball);
+
+
+			// COLLISIONS
+			check_paddle_collision(pball, ppaddle);
+			check_brick_collision(pball, bricks, plevel);
+
+			int lost = check_ball_lost(pball, ppaddle, plevel);
+			if (lost == -1) { running = 0; } // game over
+			if (lost >= 1)  { launched = 0; } // reset launch
+
+			// NEW LEVEL
+			if (check_level_complete(bricks))
+			{
+				plevel->level++;
+
+				if (plevel->level > MAX_LEVEL)
+				{
+					running = 0; // you win
+				}
+				else
+				{
+					// increase speed and score_mult each level
+					plevel->speed_mult += 0.5f;
+					plevel->score_mult +=0.5f;
+
+					// reset bricks and ball
+					brick_init(bricks);
+					init_new_level(plevel, bricks);
+					pad_ball_init(pball, ppaddle, plevel);
+					launched = 0;
+				}
+			}
+
         }
 
         frame++;
         key = 0;
 
-        // 3. COLISIONES (próximo paso)
-        check_paddle_collision(pball, ppaddle);
-        check_brick_collision(pball, bricks);
-        // 4. RENDER
-        render(ppaddle, pball, bricks);
+        // RENDER
+        render(ppaddle, pball, bricks, plevel);
         usleep(SLEEP_TIME);
     }
 
@@ -240,21 +355,21 @@ void game_loop(ball_t *pball, paddle_t *ppaddle, brick_t bricks[], level_t *plev
 }
 
 
-void render(paddle_t *ppaddle, ball_t *pball, brick_t bricks[])
+void render(paddle_t *ppaddle, ball_t *pball, brick_t bricks[], level_t *plevel)
 {
     CLEAR_SCREEN;
     PRINT_TOP_RIGHT;
 
-    // Ladrillos (hardcoded en las primeras BR_ROWS filas)
+    // Bricks
     for (int i = 0; i < BR_BOARD; i++)
     {
         if (bricks[i].hp > 0)
         {
-            printf("\033[%d;%dH#", bricks[i].y + 1, bricks[i].x + 1);
+        	printf("\033[%d;%dH%c", bricks[i].y + 1, bricks[i].x + 1, bricks[i].key);
         }
     }
 
-    // Pelota
+    // Ball
     printf("\033[%d;%dHO", pball->y + 1, pball->x + 1);
 
     // Paddle
@@ -263,6 +378,8 @@ void render(paddle_t *ppaddle, ball_t *pball, brick_t bricks[])
     {
         printf("\033[%d;%dH=", ppaddle->y + 1, ppaddle->x + i + 1);
     }
+    // Life and Score
+    printf("\033[%d;1H Lives: %d   Score: %d", ROWS + 1, plevel->lives, plevel->score);
 
     fflush(stdout);
 }

@@ -30,6 +30,7 @@ typedef struct
 	int dy;
 	int hp; //LIFE_MBALL for the main, LIFE_E_BALL for the extras.
 	float speed;
+	int active;
 	
 }ball_t;
 
@@ -50,6 +51,14 @@ typedef struct
 
 typedef struct
 {
+    int x;
+    int y;
+    int type;
+    int active;
+} capsule_t;
+
+typedef struct
+{
 	int level;
 	int lives;
 	float speed_mult;
@@ -59,6 +68,7 @@ typedef struct
 }level_t;
 
 //CONSTANTS
+
 //GAMEBOARD
 #define ROWS 30 //LOSES IN THE N, Arrays from 0to ROWS-1
 #define COLS 15 //ODD NUMBER TO CENTER PADDLE
@@ -70,6 +80,7 @@ typedef struct
 #define INITIAL_LIVES 3
 #define BASE_SPEED 4
 #define MAX_LEVEL 10
+#define MAX_BALLS 5
 
 //BALL & PADDLE
 #define LIFE_BALL 1 //So that it never disapears if touches many blocks in the same time, condition <=0 && >-10
@@ -80,17 +91,25 @@ typedef struct
 //KEYS
 #define LEFT 'a'
 #define RIGHT 'd'
+#define CHEAT_CLEAR_BRICKS 'c'
+#define CHEAT_SPAWN_POWERS 'p'
 
-// Brick types
-#define BR_TYPE_1 1   // common
-#define BR_TYPE_2 2   // medium
-#define BR_TYPE_3 3   // hard
+//CAPSULES
+#define MAX_CAPSULES 5
+#define MAX_PADDLE_SIZE 11
+#define POWER_DURATION 600   // FRAMES (15 SECONDS AT 40FPS)
+#define CAPSULE_SPEED 3      // CAPSULE FALLS EVERY N FRAMES
+
+// BRICK TYPES
+#define BR_TYPE_1 1   // COMMON
+#define BR_TYPE_2 2   // MEDIUM
+#define BR_TYPE_3 3   // HARD
 #define BR_TYPE_4 4   // power-up A
 #define BR_TYPE_5 5   // power-up B
 #define BR_TYPE_6 6   // power-up C
 #define BR_TYPE_7 7   // power-up D
 
-// Brick visual keys
+// BRICK VISUAL KEYS
 #define BR_KEY_1 '-'
 #define BR_KEY_2 '='
 #define BR_KEY_3 '#'

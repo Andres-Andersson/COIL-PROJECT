@@ -21,11 +21,14 @@ int main(void){
 	brick_init (bricks);
 	init_new_level (&level_stats, bricks);
 
-	ball_t m_ball;
+	ball_t balls[MAX_BALLS] = {0};
 	paddle_t paddle;
-	pad_ball_init (&m_ball, &paddle, &level_stats);
+	pad_ball_init (balls, &paddle, &level_stats);
 
-    game_loop(&m_ball, &paddle, bricks, &level_stats);
+	capsule_t capsules[MAX_CAPSULES] = {0};
+	powers_t  active_powers[2]       = {0};  // [0]=TYPE4, [1]=TYPE6
+
+	game_loop(balls, &paddle, bricks, &level_stats, capsules, active_powers);
 	return 0;
 }
 

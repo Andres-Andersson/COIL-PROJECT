@@ -127,6 +127,9 @@ typedef struct
 #define BR_SCORE_6 150
 #define BR_SCORE_7 150
 
+
+
+
 // MENU DISPLAY (GAUSS WILL CHECK)
 #define US_SECOND 1000000
 

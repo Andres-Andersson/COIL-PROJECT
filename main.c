@@ -8,7 +8,7 @@ int main(void){
 	srand (time(NULL));
 	int program_running=1;
 
-	char username[MAX_USERNAME+2]; //We make sure that nor the enter nor the terminating character get clipped
+	char username[MAX_USERNAME+1]; //We include the terminating character
 	int score;
 
 	score = get_username(username);

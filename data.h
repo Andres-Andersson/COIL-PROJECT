@@ -16,8 +16,8 @@
 #include <stdlib.h>
 
 
-#define INVALID_USER 0
-#define VALID_USER 1
+#define FALSE 0
+#define TRUE 1
 
 #define MULT 2
 

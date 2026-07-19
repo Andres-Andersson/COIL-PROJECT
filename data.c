@@ -11,37 +11,63 @@ static int compare_players(const void*p1, const void* p2);
 
 static int validate_username(char*username){
 	int length = strlen(username);
-	if (length<MIN_USERNAME||length>MAX_USERNAME){
-		return INVALID_USER; //If the username is longer or shorter it will be assumed invalid
-	}
 
 	for (int i=0; i<length;i++){
 		char letter = username[i];
 		if (!isalpha(letter)){
-			return INVALID_USER;
+			return FALSE;
 		}
 	}
 	 //If the username passed the filter, we know is valid.
-	return VALID_USER;
+	return TRUE;
 
 }
 
 int get_username(char*username){
-		int valid_user;
 		int score;
 
-		//char temp_buffer[MAX_BUFFER];
+		int c;
+		int i;
+		int long_user;
+		int valid_user;
 
 		printf("Hi there!\nPlease enter your username to start playing!\n");
 
 		do //We save and verify the username
 		{
-			if(fgets(username, MAX_USERNAME, stdin) != NULL){
-				username[strcspn(username, "\n")] = 0; //We replace the \n by a terminating character
+			i=0;
+			long_user = FALSE;
+			valid_user = TRUE;
+			while(((c=getchar())!= '\n') && (c!= EOF)){
+				if (i<MAX_USERNAME){
+					username[i++]=c;
+				}
+				else{
+					long_user=1;
+				}
+
 			}
-			valid_user = validate_username(username);
-			if (!valid_user){
-				printf("Invalid username, please try again\n");
+			username[i] = '\0';
+
+			//We check that the username complies with all the requirements.
+
+			if (i<MIN_USERNAME){
+				printf("Your username must be more than %d letters long. Please try again\n", MIN_USERNAME);
+				valid_user = FALSE;
+			}
+
+			if (long_user){
+				printf("Your username must be less than %d letters long. Please try again\n",MAX_USERNAME);
+				valid_user = FALSE;
+			}
+
+
+
+			if (valid_user){
+				valid_user = validate_username(username);
+				if (!valid_user){
+					printf("Your username must only contain letters! Please try again\n");
+				}
 			}
 			usleep(SLEEP_TIME);
 		}

@@ -1,10 +1,5 @@
-/*
- * logic.c
- *
- *  Created on: Jul 12, 2026
- *      Author: progra
- */
 
+/*
 #include <stdio.h>
 #include <unistd.h>
 #include "entities.h"
@@ -736,3 +731,4 @@ void render(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *plevel
 
     fflush(stdout);
 }
+*/

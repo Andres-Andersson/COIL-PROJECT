@@ -4,21 +4,53 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "entities.h"
 
-typedef struct termios Terminal;
+int open_menu(char*, int score);
+void end_program();
 
-int display_menu(Terminal*);
+typedef enum{
+	QUIT,
+	PLAY,
+	LEADERBOARD
+}modes;
 
-void print_Menu(void);
+#define FPS 70
+#define MENU_WAIT1 (1000000/FPS)
+#define MENU_WAIT2 400000
 
-void Raw_mode(Terminal*);
+#define ROCKET_ANIM_FREQ 9 //The higher the number the less frequent it will change
+#define STAR_ANIM_FREQ 12
 
-void Canonical_mode(Terminal*);
+#define MENU_HEIGHT 23
+#define MENU_WIDTH 79
 
-int animate_menu(Terminal*);
 
+#define M_SPACING 3
+
+#define M1 1
+#define M2 M1+5
+#define M3 M2+M_SPACING
+#define M4 M3+M_SPACING
+#define M5 MENU_HEIGHT-3
+#define M6 MENU_HEIGHT-2
+
+#define ROCKET_Y 15
+#define ROCKET_X 1
+#define OFFSET 22
+
+#define MLEFT 1
+
+#define MAX_STARS 15
+#define MAX_SPEED 3
+
+typedef struct {
+    int x;
+    int y;
+    int speed;
+} Star_t;
 
 
 

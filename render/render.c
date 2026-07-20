@@ -1,5 +1,4 @@
 #include "render.h"
-#include "entities.h"
 
 static int initialized = FALSE;
 

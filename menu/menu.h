@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "entities.h"
 
 int open_menu(char*, int score);
 void end_program();

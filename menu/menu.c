@@ -1,6 +1,6 @@
 #include "menu.h"
 
-#include "render.h"
+#include "../render/render.h"
 
 static void draw_menu(char*username, int score, int selection);
 static void animate_rocket(int rocket_y, int rocket_x, int frame_count);

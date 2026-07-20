@@ -8,8 +8,7 @@
 #ifndef ENTITIES_H_
 #define ENTITIES_H_
 
-#include <stdlib.h>
-#include <time.h>
+#include <unistd.h>
 
 typedef struct 
 {
@@ -19,6 +18,7 @@ typedef struct
 	int type;
 	int score;
 	char key;
+	char color;
 }brick_t;
 //TYPE 1= COMMON
 
@@ -55,6 +55,7 @@ typedef struct
     int y;
     int type;
     int active;
+    char key;
 } capsule_t;
 
 typedef struct
@@ -69,26 +70,32 @@ typedef struct
 
 //CONSTANTS
 
-//GAME
-#define INITIAL_LIVES 3
-#define BASE_SPEED 4
-#define MAX_LEVEL 10
+#define US_SECOND 1000000
+
+#define FPS 40
+
+#define MENU_WAIT US_SECOND
+#define SLEEP_TIME (US_SECOND/(FPS))
+
+//GAMEBOARD
+#define ROWS 30 //LOSES IN THE N, Arrays from 0to ROWS-1
+#define COLS 15 //ODD NUMBER TO CENTER PADDLE
+#define gameboard (ROWS * COLS)
+#define BR_ROWS 10
+#define BR_BOARD (COLS * BR_ROWS)
+
+//BALL & PADDLE
+#define LIFE_BALL 1 //So that it never disappears if touches many blocks in the same time, condition <=0 && >-10
+
+#define PADDLE_ROW (ROWS-1)
+#define INIT_SIZE_PADDLE 5
+
+//DEFAULT VALUES
 #define MAX_BALLS 5
-
-//CAPSULES
+#define INIT_SIZE_PADDLE 5
 #define MAX_CAPSULES 5
-#define MAX_PADDLE_SIZE 11
-#define POWER_DURATION 600   // FRAMES (15 SECONDS AT 40FPS)
-#define CAPSULE_SPEED 3      // CAPSULE FALLS EVERY N FRAMES
 
-// BRICK TYPES
-#define BR_TYPE_1 1   // COMMON
-#define BR_TYPE_2 2   // MEDIUM
-#define BR_TYPE_3 3   // HARD
-#define BR_TYPE_4 4   // power-up A
-#define BR_TYPE_5 5   // power-up B
-#define BR_TYPE_6 6   // power-up C
-#define BR_TYPE_7 7   // power-up D
+
 
 // BRICK VISUAL KEYS
 #define BR_KEY_1 '-'
@@ -107,6 +114,16 @@ typedef struct
 #define BR_SCORE_5 150
 #define BR_SCORE_6 150
 #define BR_SCORE_7 150
+
+// BRICK TYPES
+#define BR_TYPE_1 1   // COMMON
+#define BR_TYPE_2 2   // MEDIUM
+#define BR_TYPE_3 3   // HARD
+#define BR_TYPE_4 4   // power-up A
+#define BR_TYPE_5 5   // power-up B
+#define BR_TYPE_6 6   // power-up C
+#define BR_TYPE_7 7   // power-up D
+
 
 
 #endif /* ENTITIES_H_ */

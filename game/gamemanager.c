@@ -1,4 +1,4 @@
-#include "entities.h"
+#include "dependencies/entities.h"
 #include "gamemanager.h"
 
 
@@ -70,7 +70,7 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
         // BALL
         if (!launched)
         {
-            if (key == PLAY_ACTION)
+            if (key == SPACE)
             {
                 launched = 1;
                 balls[0].dx = 1;
@@ -122,7 +122,7 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
         update_powers(active_powers, ppaddle, balls);
 
         frame++;
-        key = ACTION_NONE;
+        key = NO_ACTION;
 
         render_game(ppaddle, balls, bricks, plevel, capsules);
         usleep(SLEEP_TIME);

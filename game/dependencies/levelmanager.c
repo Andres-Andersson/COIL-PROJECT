@@ -6,7 +6,7 @@ void brick_init (brick_t bricks[])
 	int i=0, j=0, k=0;
 	for (;i<BR_BOARD;k++)
 	{
-		for (j=0;j<COLS;j++,i++) //SETS EACH BLOCK WITH ITS POSITION (X,Y), ONLY ONCE
+		for (j=0;j<GAME_COLS;j++,i++) //SETS EACH BLOCK WITH ITS POSITION (X,Y), ONLY ONCE
 		{
 			bricks[i].y=k;
 			bricks[i].x=j;
@@ -19,7 +19,7 @@ void pad_ball_init(ball_t balls[], paddle_t *ppaddle, level_t *plevel)
     int i; //DEACTIVATE ALL BALLS
     for (i = 1; i < MAX_BALLS; i++) { balls[i].active = 0; }
 
-    ppaddle->x   = (COLS/2+1); //SETS PADDLE
+    ppaddle->x   = (GAME_COLS/2+1); //SETS PADDLE
     ppaddle->y   = PADDLE_ROW;
     ppaddle->size = INIT_SIZE_PADDLE;
     ppaddle->dx  = 0;
@@ -61,9 +61,9 @@ void init_level_1(brick_t bricks[])
 
     for (row = 0; row < BR_ROWS; row++)
     {
-        for (col = 0; col < COLS; col++)
+        for (col = 0; col < GAME_COLS; col++)
         {
-            i = row * COLS + col;
+            i = row * GAME_COLS + col;
             bricks[i].hp = 0; // EMPTY BY DEFAULT
 
             if (row == 0 || row == 2 || row == 6 || row == 8)
@@ -88,7 +88,7 @@ void init_level_1(brick_t bricks[])
 void init_level_2(brick_t bricks[])
 {
     int i, row, col;	//LEVEL 2, AN INVERSE PYRAMID WITH SUPERPOWERS
-    int center = COLS / 2;  // FINDS THE MIDDLE
+    int center = GAME_COLS / 2;  // FINDS THE MIDDLE
 
     // CLEARS ALL, TO PREVENT ERRORS
     for (i = 0; i < BR_BOARD; i++)
@@ -98,9 +98,9 @@ void init_level_2(brick_t bricks[])
 
     for (row = 0; row < BR_ROWS; row++)
     {
-        for (col = 0; col < COLS; col++)
+        for (col = 0; col < GAME_COLS; col++)
         {
-            i = row * COLS + col;
+            i = row * GAME_COLS + col;
 
             if (row <= 7)
             {
@@ -154,12 +154,12 @@ void init_level_3(brick_t bricks[])
 
     for (row = 0; row < BR_ROWS; row++)
     {
-        for (col = 0; col < COLS; col++)
+        for (col = 0; col < GAME_COLS; col++)
         {
-            i = row * COLS + col;
+            i = row * GAME_COLS + col;
 
             int row_layer = row < (BR_ROWS - row - 1) ? row : (BR_ROWS - row - 1);
-            int col_layer = col < (COLS  - col  - 1) ? col : (COLS  - col  - 1);
+            int col_layer = col < (GAME_COLS  - col  - 1) ? col : (GAME_COLS  - col  - 1);
             int min_layer = row_layer < col_layer ? row_layer : col_layer;
 
             if (min_layer == 0 || min_layer == 2)
@@ -195,9 +195,9 @@ void init_level_4(brick_t bricks[])
 
     for (row = 0; row < BR_ROWS; row++)
     {
-        for (col = 0; col < COLS; col++)
+        for (col = 0; col < GAME_COLS; col++)
         {
-            i = row * COLS + col;
+            i = row * GAME_COLS + col;
 
             // ROWS 0 AND 9 ALTERNATE BRICK TYPE 3
             if (row == 0 || row == 9)
@@ -295,22 +295,6 @@ void set_brick(brick_t *brick, int type)
     }
 }
 
-void update_brick_key(brick_t *brick) //TO REPRESENT THE DAMAGE IN BLOCKS: # -> = -> -
-{
-    if (brick->type > BR_TYPE_3)
-    {
-    	return; // DON´T DO ANYTHING TO POWER-UPS
-    }
-
-    if      (brick->hp == 2)
-    {
-    	brick->key = BR_KEY_2;
-    }
-    else if (brick->hp == 1)
-    {
-    	brick->key = BR_KEY_1;
-    }
-}
 
 void update_paddle(paddle_t *ppaddle, char key)
 {
@@ -329,9 +313,9 @@ void update_paddle(paddle_t *ppaddle, char key)
     	ppaddle->x = half;
     }
 
-    if (ppaddle->x + half >= COLS)
+    if (ppaddle->x + half >= GAME_COLS)
     {
-    	ppaddle->x = COLS - 1 - half;
+    	ppaddle->x = GAME_COLS - 1 - half;
     }
 }
 
@@ -346,9 +330,9 @@ void update_ball(ball_t *pball)
     	pball->x = 0;
     	pball->dx =  1;
     }
-    if (pball->x >= COLS - 1)
+    if (pball->x >= GAME_COLS - 1)
     {
-    	pball->x = COLS - 1;
+    	pball->x = GAME_COLS - 1;
     	pball->dx = -1;
     }
 

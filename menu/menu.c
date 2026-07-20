@@ -32,7 +32,7 @@ int open_menu(char*username, int score){
 
 	while(menu_running){
 
-		GameAction action = render_get_action(WIN_MENU);
+		MenuAction action = render_get_action(WIN_MENU);
 
 		switch(action){
 			case QUIT_PAUSE:

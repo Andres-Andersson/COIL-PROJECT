@@ -8,6 +8,8 @@
 #ifndef POWERS_H_
 #define POWERS_H_
 
+#include "entities.h"
+
 //CAPSULES
 void spawn_capsule(capsule_t capsules[], int x, int y, int type);
 void update_capsules(capsule_t capsules[], paddle_t *ppaddle, ball_t balls[], powers_t active_powers[]);

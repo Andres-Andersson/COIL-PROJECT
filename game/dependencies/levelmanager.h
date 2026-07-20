@@ -13,7 +13,7 @@ void brick_init(brick_t bricks[]);
 void pad_ball_init(ball_t balls[], paddle_t *ppaddle, level_t *plevel);
 void level_init (level_t *level);
 void set_brick(brick_t *brick, int type);
-void update_brick_key(brick_t *brick);
+
 
 
 //LEVEL GENERATION

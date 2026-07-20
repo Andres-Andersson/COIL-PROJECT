@@ -3,7 +3,7 @@
 #include "entities.h"
 
 void init_game_render(){
-	render_create_win(WIN_GAME_PLAYFIELD, ROWS, COLS, PLAYFLEID_Y, PLAYFLEID_X);
+	render_create_win(WIN_GAME_PLAYFIELD, GAME_ROWS, GAME_COLS, PLAYFLEID_Y, PLAYFLEID_X);
 }
 
 void end_game_render(){
@@ -44,7 +44,7 @@ void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *p
     	print_char(WIN_GAME_PLAYFIELD, ppaddle->y + 1, ppaddle->x + i + 1, bricks[i].color, '=');
     }
     // Life and Score
-    print_str(WIN_GAME_PLAYFIELD, ROWS + 1, 0, RED, "Lives: %d   Score: %d", plevel->lives, plevel->score);
+    print_str(WIN_GAME_PLAYFIELD, GAME_ROWS + 1, 0, RED, "Lives: %d   Score: %d", plevel->lives, plevel->score);
 
     // CAPSULES
        int i;

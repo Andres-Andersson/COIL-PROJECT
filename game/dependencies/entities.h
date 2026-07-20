@@ -9,6 +9,16 @@
 #define ENTITIES_H_
 
 #include <unistd.h>
+#include <stdlib.h>
+
+typedef enum{
+	NO_ACTION,
+	LEFT,
+	RIGHT,
+	SPACE,
+	CHEAT_CLEAR_BRICKS,
+	CHEAT_SPAWN_POWERS,
+}GameAction;
 
 typedef struct 
 {
@@ -78,16 +88,16 @@ typedef struct
 #define SLEEP_TIME (US_SECOND/(FPS))
 
 //GAMEBOARD
-#define ROWS 30 //LOSES IN THE N, Arrays from 0to ROWS-1
-#define COLS 15 //ODD NUMBER TO CENTER PADDLE
-#define gameboard (ROWS * COLS)
+#define GAME_ROWS 30 //LOSES IN THE N, Arrays from 0to ROWS-1
+#define GAME_COLS 15 //ODD NUMBER TO CENTER PADDLE
+#define gameboard (GAME_ROWS * GAME_COLS)
 #define BR_ROWS 10
-#define BR_BOARD (COLS * BR_ROWS)
+#define BR_BOARD (GAME_COLS * BR_ROWS)
 
 //BALL & PADDLE
 #define LIFE_BALL 1 //So that it never disappears if touches many blocks in the same time, condition <=0 && >-10
 
-#define PADDLE_ROW (ROWS-1)
+#define PADDLE_ROW (GAME_ROWS-1)
 #define INIT_SIZE_PADDLE 5
 
 //DEFAULT VALUES

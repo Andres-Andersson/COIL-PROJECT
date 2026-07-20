@@ -1,7 +1,8 @@
 #include "entities.h"
 #include "physics.h"
+#include "powers.h"
 
-
+static void update_brick_key(brick_t *brick);
 
 void check_paddle_collision(ball_t *pball, paddle_t *ppaddle)
 {
@@ -86,7 +87,7 @@ int check_ball_lost(ball_t balls[], paddle_t *ppaddle, level_t *plevel)
         {
         	continue;
         }
-        if (balls[i].y >= ROWS)
+        if (balls[i].y >= GAME_ROWS)
         {
         	balls[i].active = 0;
         }  // DEACTIVATE LOST BALL
@@ -100,7 +101,7 @@ int check_ball_lost(ball_t balls[], paddle_t *ppaddle, level_t *plevel)
     {
         plevel->lives--;
         if (plevel->lives <= 0) { return -1; }  // GAME OVER
-        pad_ball_init(balls, ppaddle, plevel);
+        //pad_ball_init(balls, ppaddle, plevel);
         return 1;
     }
     return 0;
@@ -113,4 +114,21 @@ int check_level_complete(brick_t bricks[])
         if (bricks[i].hp > 0) { return 0; }
     }
     return 1; // ALL BRICKS DESTROYED
+}
+
+static void update_brick_key(brick_t *brick) //TO REPRESENT THE DAMAGE IN BLOCKS: # -> = -> -
+{
+    if (brick->type > BR_TYPE_3)
+    {
+    	return; // DON´T DO ANYTHING TO POWER-UPS
+    }
+
+    if      (brick->hp == 2)
+    {
+    	brick->key = BR_KEY_2;
+    }
+    else if (brick->hp == 1)
+    {
+    	brick->key = BR_KEY_1;
+    }
 }

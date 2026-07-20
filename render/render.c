@@ -136,7 +136,7 @@ void render_clear_win(WindowID win_id) {
 }
 
 
-GameAction render_get_action(WindowID win_id){
+MenuAction render_get_action(WindowID win_id){
 	if ((win_id >= W_MAX) || (win_id < 0) || (windows[win_id] == NULL)) {
 	        return ACTION_NONE;
 	    }
@@ -161,24 +161,6 @@ GameAction render_get_action(WindowID win_id){
 	case 'l':
 	case 'L':
 		return LEADERBOARD_ACTION;
-
-	case 'a':
-	case 'A':
-	case KEY_LEFT:
-		return LEFT;
-
-	case 'd':
-	case 'D':
-	case KEY_RIGHT:
-		return RIGHT;
-
-	case 'c':
-	case 'C':
-		return CHEAT_CLEAR_BRICKS;
-
-	case 'v':
-	case 'V':
-		return CHEAT_SPAWN_POWERS;
 	default:
 		return ACTION_NONE;
 	}

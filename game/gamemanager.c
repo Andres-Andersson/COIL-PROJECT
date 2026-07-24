@@ -26,6 +26,7 @@ int play_game(int score){
 	powers_t  active_powers[2]       = {0};  // [0]=TYPE4, [1]=TYPE6
 
 	init_game_render();
+	instructions();
 
 	int newscore = game_loop(balls, &paddle, bricks, &level_stats, capsules, active_powers);
 	return newscore;
@@ -37,16 +38,26 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
 
     char key;
     int running = 1;
+    int paused = 0;
     int launched = 0;
     int frame = 0;
 
 
 
-    while (running)
+    while ((running))
     {
     	key = get_key();
         // INPUT
-        update_paddle(ppaddle, key);
+
+
+        if (key==LEFT)//ALLOWS TO MOVE THE PADDLE
+            {ppaddle->dx = -1;}
+        else if (key == RIGHT)
+        	{ppaddle->dx = 1;}
+        else
+            {ppaddle->dx = 0;}
+
+        update_paddle(ppaddle);
 
         // CHEATS
         if (key == CHEAT_CLEAR_BRICKS)
@@ -67,10 +78,28 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
             }
         }
 
+        if (launched&&!paused){
+        	if (key == PLAY_ACTION){
+        		paused = 1;
+        		if ((game_paused()==PLAY_ACTION)){
+        			paused =0;
+        			resume_game(PLAY_ACTION, ppaddle, balls, bricks, plevel, capsules);
+
+
+        		}
+        		else{
+        			running = 0;
+        			resume_game(QUIT_PAUSE, ppaddle, balls, bricks, plevel, capsules);
+        		}
+
+
+        	}
+        }
+
         // BALL
-        if (!launched)
+        if (!launched && !paused)
         {
-            if (key == SPACE)
+            if (key == PLAY_ACTION)
             {
                 launched = 1;
                 balls[0].dx = 1;
@@ -104,8 +133,8 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
                 }
                 else
                 {
-                    plevel->speed_mult += 0.25f;
-                    plevel->score_mult  += 0.5f;
+                    plevel->speed_mult += SPEED_MULT;
+                    plevel->score_mult  += SCORE_MULT;
                     brick_init(bricks);
                     init_new_level(plevel, bricks);
                     pad_ball_init(balls, ppaddle, plevel);  // BALLS NOT PBALL
@@ -122,12 +151,13 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
         update_powers(active_powers, ppaddle, balls);
 
         frame++;
-        key = NO_ACTION;
+        key = ACTION_NONE;
 
         render_game(ppaddle, balls, bricks, plevel, capsules);
         usleep(SLEEP_TIME);
     }
 
     end_game_render();
+    return plevel->score;
 }
 

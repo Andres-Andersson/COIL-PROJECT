@@ -11,14 +11,18 @@ int open_menu(char*, int score);
 void end_program();
 
 typedef enum{
-	QUIT,
-	PLAY,
-	LEADERBOARD
-}modes;
+	NONE_,
+	PLAY_,
+	QUIT_,
+	LEADERBOARD_,
+}MenuSelection;
+
+#define US_TO_SECOND 1000000
 
 #define FPS 70
-#define MENU_WAIT1 (1000000/FPS)
+#define MENU_WAIT1 (US_TO_SECOND/FPS)
 #define MENU_WAIT2 400000
+#define COOL_DOWN_WAIT US_TO_SECOND/10
 
 #define ROCKET_ANIM_FREQ 9 //The higher the number the less frequent it will change
 #define STAR_ANIM_FREQ 12

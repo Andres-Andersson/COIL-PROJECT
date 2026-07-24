@@ -7,6 +7,8 @@ static int user_exists(const char*);
 static void register_new_user(const char*);
 static void get_top_scores_list();
 static int compare_players(const void*p1, const void* p2);
+static void save_new_score(int round_score, char* username);
+
 
 
 static int validate_username(char*username){
@@ -181,5 +183,46 @@ static void get_top_scores_list(){
 
 static int compare_players(const void*p1, const void* p2){
 	return (((Player_t*)p2)->score)- (((Player_t*)p1)->score);
+}
+
+void check_score(char* username, int round_score, int saved_score){
+
+	if(round_score> saved_score){
+		save_new_score(round_score, username);
+	}
+}
+
+static void save_new_score(int round_score, char* username){
+	FILE * original = fopen("scores.txt", "r");
+
+	if ((original == NULL)||(username==NULL)){
+		return;
+	}
+
+	FILE * temp = fopen("temp.txt", "w");
+
+	if ((temp==NULL)){
+			fclose(original);
+			return;
+		}
+
+		char current_name[LINE_SIZE] = {0};
+		int current_score;
+
+		while(fscanf(original, "%s\t%d", current_name, &current_score) == 2){ //Reads line by line and if it reads the username with the new high score it will save it in the temp file
+			if (strcmp(current_name,username)){
+				fprintf(temp,"%s\t%d\n",current_name,current_score);
+			}
+			else{
+				fprintf(temp,"%s\t%d\n",username,round_score);
+
+			}
+		}
+		fclose(temp);
+		fclose(original);
+
+		remove("scores.txt");
+		rename("temp.txt", "scores.txt");
+
 }
 

@@ -12,12 +12,15 @@
 #include <stdlib.h>
 
 typedef enum{
-	NO_ACTION,
+	ACTION_NONE,
+	PLAY_ACTION,
+	QUIT_PAUSE,
+	LEADERBOARD_ACTION,
 	LEFT,
 	RIGHT,
-	SPACE,
 	CHEAT_CLEAR_BRICKS,
 	CHEAT_SPAWN_POWERS,
+
 }GameAction;
 
 typedef struct 
@@ -28,7 +31,6 @@ typedef struct
 	int type;
 	int score;
 	char key;
-	char color;
 }brick_t;
 //TYPE 1= COMMON
 
@@ -88,22 +90,22 @@ typedef struct
 #define SLEEP_TIME (US_SECOND/(FPS))
 
 //GAMEBOARD
-#define GAME_ROWS 30 //LOSES IN THE N, Arrays from 0to ROWS-1
-#define GAME_COLS 15 //ODD NUMBER TO CENTER PADDLE
-#define gameboard (GAME_ROWS * GAME_COLS)
+#define GAME_ROWS 20 //LOSES IN THE N, Arrays from 0to ROWS-1
+#define GAME_COLS 23 //ODD NUMBER TO CENTER PADDLE
+#define GAMEBOARD (GAME_ROWS * GAME_COLS)
 #define BR_ROWS 10
 #define BR_BOARD (GAME_COLS * BR_ROWS)
 
 //BALL & PADDLE
 #define LIFE_BALL 1 //So that it never disappears if touches many blocks in the same time, condition <=0 && >-10
 
-#define PADDLE_ROW (GAME_ROWS-1)
-#define INIT_SIZE_PADDLE 5
+
 
 //DEFAULT VALUES
 #define MAX_BALLS 5
 #define INIT_SIZE_PADDLE 5
 #define MAX_CAPSULES 5
+#define PADDLE_ROW (GAME_ROWS-2)
 
 
 
@@ -133,7 +135,6 @@ typedef struct
 #define BR_TYPE_5 5   // power-up B
 #define BR_TYPE_6 6   // power-up C
 #define BR_TYPE_7 7   // power-up D
-
 
 
 #endif /* ENTITIES_H_ */

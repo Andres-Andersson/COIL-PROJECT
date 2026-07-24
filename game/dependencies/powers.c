@@ -80,7 +80,7 @@ void update_capsules(capsule_t capsules[], paddle_t *ppaddle, ball_t balls[], po
         capsules[i].y++;
 
         // CAPSULE OFF SCREEN
-        if (capsules[i].y >= ROWS)
+        if (capsules[i].y >= GAME_ROWS)
         {
             capsules[i].active = 0;
             continue;

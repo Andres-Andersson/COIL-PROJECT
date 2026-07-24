@@ -2,8 +2,10 @@
 #include "../../render/render.h"
 #include "entities.h"
 
+#include <string.h>
+
 void init_game_render(){
-	render_create_win(WIN_GAME_PLAYFIELD, GAME_ROWS, GAME_COLS, PLAYFLEID_Y, PLAYFLEID_X);
+	render_create_win(WIN_GAME_PLAYFIELD, GAME_ROWS+3, GAME_COLS+2, PLAYFLEID_Y, PLAYFLEID_X);
 }
 
 void end_game_render(){
@@ -14,15 +16,33 @@ char get_key(){
 	return render_get_action(WIN_GAME_PLAYFIELD);;
 }
 
+void instructions(){
+
+	render_create_win(WIN_PAUSED, GAME_ROWS+4, GAME_COLS+2, PLAYFLEID_Y, PLAYFLEID_X);
+
+	print_str(WIN_PAUSED, I1, GET_CENTER_TEXT(GAME_COLS+2, "HOW TO PLAY"), GREEN, "HOW TO PLAY");
+
+	print_str(WIN_PAUSED, I2, GET_CENTER_TEXT(GAME_COLS+2, "[SPACE]"), YELLOW, "[SPACE]");
+	print_str(WIN_PAUSED, I2+1, GET_CENTER_TEXT(GAME_COLS+2, "TO START/PAUSE THE GAME"), RED, "TO START/PAUSE THE GAME");
+
+	print_str(WIN_PAUSED, I3, GET_CENTER_TEXT(GAME_COLS+2, "[A-D]"), YELLOW, "[A-D]");
+	print_str(WIN_PAUSED, I3+1, GET_CENTER_TEXT(GAME_COLS+2, "TO MOVE THE PADDLE"), CYAN, "TO MOVE THE PADDLE");
+
+	render_refresh_win(WIN_PAUSED);
+	usleep(INIT_WAIT);
+
+	render_destroy_win(WIN_PAUSED);
+}
+
 void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *plevel, capsule_t capsules[])
 {
-
+	render_clear_win(WIN_GAME_PLAYFIELD);
     // Bricks
     for (int i = 0; i < BR_BOARD; i++)
     {
         if (bricks[i].hp > 0)
         {
-        	print_char(WIN_GAME_PLAYFIELD, bricks[i].y + 1, bricks[i].x + 1, bricks[i].color, bricks[i].key);
+        	print_char(WIN_GAME_PLAYFIELD, bricks[i].y + 1, bricks[i].x + 1, ((bricks[i].type)+1), bricks[i].key);
 
         }
     }
@@ -33,7 +53,7 @@ void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *p
     {
         if (balls[b].active)
         {
-        	print_char(WIN_GAME_PLAYFIELD, balls[b].y + 1, balls[b].x + 1 + 1, CYAN, 'O');
+        	print_char(WIN_GAME_PLAYFIELD, balls[b].y + 1, balls[b].x + 1, CYAN, 'O');
         }
     }
 
@@ -41,10 +61,11 @@ void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *p
     int half = ppaddle->size / 2;
     for (int i = -half; i <= half; i++)
     {
-    	print_char(WIN_GAME_PLAYFIELD, ppaddle->y + 1, ppaddle->x + i + 1, bricks[i].color, '=');
+    	print_char(WIN_GAME_PLAYFIELD, ppaddle->y + 1, ppaddle->x + i + 1, RED, '=');
     }
     // Life and Score
-    print_str(WIN_GAME_PLAYFIELD, GAME_ROWS + 1, 0, RED, "Lives: %d   Score: %d", plevel->lives, plevel->score);
+    print_str(WIN_GAME_PLAYFIELD, GAME_ROWS, TEXT_X, GREEN, "Lives: %d   Score: %d", plevel->lives, plevel->score);
+    print_str(WIN_GAME_PLAYFIELD, GAME_ROWS + 1, TEXT_X, YELLOW, "Level: %d", plevel->level);
 
     // CAPSULES
        int i;
@@ -52,11 +73,62 @@ void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *p
        {
            if (capsules[i].active)
            {
-        	   print_char(WIN_GAME_PLAYFIELD, capsules[i].y + 1, capsules[i].x + 1, bricks[i].color, capsules[i].key);
+        	   print_char(WIN_GAME_PLAYFIELD, capsules[i].y + 1, capsules[i].x + 1, ((capsules[i].type)+1), capsules[i].key);
 
            }
        }
        render_refresh_win(WIN_GAME_PLAYFIELD);
 }
 
+int game_paused(){
+	render_create_win(WIN_PAUSED, GAME_ROWS+4, GAME_COLS+2, PLAYFLEID_Y, PLAYFLEID_X);
 
+	print_str(WIN_PAUSED, I1, GET_CENTER_TEXT(GAME_COLS+2, "GAME PAUSED"), GREEN, "GAME PAUSED");
+
+	print_str(WIN_PAUSED, I2, GET_CENTER_TEXT(GAME_COLS+2, "RESUME [SPACE]"), RED, "RESUME [SPACE]");
+
+	print_str(WIN_PAUSED, I3, GET_CENTER_TEXT(GAME_COLS+2, "QUIT [Q]"), BLUE, "QUIT [Q]");
+
+	render_refresh_win(WIN_PAUSED);
+
+	int selection = 0;
+
+	while((selection!=PLAY_ACTION)&&(selection!=QUIT_PAUSE)){
+		selection = render_get_action(WIN_PAUSED);
+		usleep(WAIT_ACTION_PAUSE);
+	}
+	clean_buffer();
+
+	return selection;
+}
+
+void resume_game(int selection, paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *plevel, capsule_t capsules[]){
+	print_str(WIN_PAUSED, I1, GET_CENTER_TEXT(GAME_COLS+2, "GAME PAUSED"), GREEN, "GAME PAUSED");
+
+	if (selection==PLAY){
+
+		int i;
+
+		print_str(WIN_PAUSED, I2, GET_CENTER_TEXT(GAME_COLS+2, "RESUME [SPACE]"), YELLOW, "RESUME [SPACE]");
+		print_str(WIN_PAUSED, I3, GET_CENTER_TEXT(GAME_COLS+2, "QUIT [Q]"), BLUE, "QUIT [Q]");
+		render_refresh_win(WIN_PAUSED);
+		usleep(RESUME_WAIT);
+		render_destroy_win(WIN_PAUSED);
+
+			for (i=0;i<COUNTDOWN;i++){
+
+				render_game(ppaddle, balls, bricks, plevel, capsules);
+				print_str(WIN_GAME_PLAYFIELD, (GAME_ROWS/2)+5, GAME_COLS/2,YELLOW,"%d",(COUNTDOWN-i));
+				render_refresh_win(WIN_GAME_PLAYFIELD);
+				usleep(SECOND);
+			}
+	}
+	else{
+		print_str(WIN_PAUSED, I2, GET_CENTER_TEXT(GAME_COLS+2, "RESUME [SPACE]"), RED, "RESUME [SPACE]");
+		print_str(WIN_PAUSED, I3, GET_CENTER_TEXT(GAME_COLS+2, "QUIT [Q]"), YELLOW, "QUIT [Q]");
+		render_refresh_win(WIN_PAUSED);
+		usleep(RESUME_WAIT);
+		render_destroy_win(WIN_PAUSED);
+	}
+
+}

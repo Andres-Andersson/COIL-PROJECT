@@ -20,7 +20,7 @@ void init_ncurses(){
 		if (has_colors()) { //Init colors
 			start_color();
 
-			init_pair(BLACK, COLOR_BLACK,COLOR_BLACK);
+			init_pair(BLACK, COLOR_BLACK,COLOR_WHITE);
 			init_pair(BLUE, COLOR_BLUE,COLOR_BLACK);
 			init_pair(GREEN, COLOR_GREEN,COLOR_BLACK);
 			init_pair(CYAN, COLOR_CYAN,COLOR_BLACK);
@@ -29,6 +29,7 @@ void init_ncurses(){
 			init_pair(YELLOW, COLOR_YELLOW,COLOR_BLACK);
 			init_pair(WHITE, COLOR_WHITE,COLOR_BLACK);
 			init_pair(SELECTION, COLOR_BLACK,COLOR_WHITE);
+
 
 		}
 
@@ -68,6 +69,8 @@ void render_destroy_win(WindowID win_id){
 		windows[win_id] = NULL;
 
 	}
+	clear();
+	refresh();
 
 
 }
@@ -135,16 +138,23 @@ void render_clear_win(WindowID win_id) {
     box(windows[win_id],0,0);
 }
 
+void clean_buffer(){
+	flushinp();
+	int ch;
+	    nodelay(stdscr, TRUE);
+	    while ((ch = getch()) != ERR) {
+	    }
+}
 
 MenuAction render_get_action(WindowID win_id){
 	if ((win_id >= W_MAX) || (win_id < 0) || (windows[win_id] == NULL)) {
-	        return ACTION_NONE;
+	        return NONE;
 	    }
 
 	int ch = wgetch(windows[win_id]);
 
 	if (ch == ERR) {
-	        return ACTION_NONE;
+	        return NONE;
 	    }
 
 	switch(ch){
@@ -152,17 +162,30 @@ MenuAction render_get_action(WindowID win_id){
 	case '\n':
 	case KEY_ENTER:
 	case ' ':
-		return PLAY_ACTION;
+		return PLAY;
 
 	case 'q':
 	case 'Q':
-		return QUIT_PAUSE;
+		return QUIT;
 
 	case 'l':
 	case 'L':
-		return LEADERBOARD_ACTION;
+		return LEADERBOARD;
+	case 'a':
+	case 'A':
+		return LEFT_;
+	case 'd':
+	case 'D':
+		return RIGHT_;
+	case 'c':
+	case 'C':
+		return CHEAT_CLEAR_BRICKS_;
+	case 'v':
+	case 'V':
+		return CHEAT_SPAWN_POWERS_;
+
 	default:
-		return ACTION_NONE;
+		return NONE;
 	}
 }
 

@@ -19,17 +19,24 @@ int main(void){
 	int selection = open_menu(username, score);
 
 	while (program_running){
-		if (selection == QUIT)
+		if (selection == QUIT_)
 			{
 				program_running = 0;
 			}
-			else if (selection == PLAY){
+			else if (selection == PLAY_){
 				round_score = play_game(score);
+				check_score(username, round_score, score);
+
+				if (round_score>score){
+					score = round_score;
+				}
+
+
 				selection = open_menu(username, score);
 
 			}
 
-			else if (selection == LEADERBOARD){
+			else if (selection == LEADERBOARD_){
 				open_leaderboard();
 				selection = open_menu(username, score);
 			}

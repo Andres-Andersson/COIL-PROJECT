@@ -9,12 +9,15 @@
 #define PHYSICS_H_
 
 //MOVEMENT
-void update_paddle(paddle_t *ppaddle, char key);
+void update_paddle(paddle_t *ppaddle);
 void update_ball(ball_t *pball);
+
+void pad_ball_init(ball_t balls[], paddle_t *ppaddle, level_t *plevel);
 
 //COLLISIONS
 void check_paddle_collision(ball_t *pball, paddle_t *ppaddle);
 int  check_ball_lost(ball_t balls[], paddle_t *ppaddle, level_t *plevel);
 void check_brick_collision(ball_t *pball, brick_t bricks[], level_t *plevel, capsule_t capsules[]);
+int check_level_complete(brick_t bricks[]);
 
 #endif /* PHYSICS_H_ */

@@ -12,11 +12,12 @@ int open_menu(char*username, int score){
 	int menu_running = TRUE;
 	int frames = 0;
 	int selection = -1;
+	int cool_down = 0;
 
 	init_ncurses();
 	render_create_win(WIN_MENU, MENU_HEIGHT, MENU_WIDTH, 0, 0);
 
-
+	clean_buffer();
 
 	int rocket_y = ROCKET_Y; //The rocket changes x spawn location
 	int rocket_x = ROCKET_X+rand()%OFFSET;
@@ -30,23 +31,36 @@ int open_menu(char*username, int score){
 	}
 
 
+
 	while(menu_running){
 
-		MenuAction action = render_get_action(WIN_MENU);
+	if (selection==-1){
 
-		switch(action){
-			case QUIT_PAUSE:
-				selection = QUIT;
-				break;
-			case PLAY_ACTION:
-				selection = PLAY;
-				break;
-			case LEADERBOARD_ACTION:
-				selection = LEADERBOARD;
-				break;
-			default:
-				break;
+		if (cool_down<=0){
+			MenuAction action = render_get_action(WIN_MENU);
+				switch(action){
+					case QUIT:
+						selection = QUIT;
+						cool_down = COOL_DOWN_WAIT;
+						break;
+					case PLAY:
+						selection = PLAY;
+						cool_down = COOL_DOWN_WAIT;
+						break;
+					case LEADERBOARD:
+						selection = LEADERBOARD;
+						cool_down = COOL_DOWN_WAIT;
+						break;
+					default:
+						break;
+				}
+
+
 		}
+		else{
+			cool_down--;
+		}
+	}
 
 		if (frames>=ROCKET_ANIM_FREQ){
 			rocket_y--;
@@ -69,13 +83,18 @@ int open_menu(char*username, int score){
 
 		render_refresh_win(WIN_MENU);
 
-		if ((QUIT<=selection) && (selection<=LEADERBOARD)){
+
+
+
+	if ((PLAY<=selection) && (selection<=LEADERBOARD)){
+			clean_buffer();
 			usleep(MENU_WAIT2);
 			menu_running = FALSE;
+			clean_buffer();
 		}
 	}
-
 	render_destroy_win(WIN_MENU);
+
 	return selection;
 }
 

@@ -36,6 +36,7 @@
 #define LEADERBOARD_WAIT_TIME SLEEP_TIME*5
 
 int get_username(char*);
+void check_score(char* username, int round_score, int saved_score);
 
 void open_leaderboard();
 

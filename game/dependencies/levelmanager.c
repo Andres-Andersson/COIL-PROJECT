@@ -14,24 +14,7 @@ void brick_init (brick_t bricks[])
 	}
 }
 
-void pad_ball_init(ball_t balls[], paddle_t *ppaddle, level_t *plevel)
-{
-    int i; //DEACTIVATE ALL BALLS
-    for (i = 1; i < MAX_BALLS; i++) { balls[i].active = 0; }
 
-    ppaddle->x   = (GAME_COLS/2+1); //SETS PADDLE
-    ppaddle->y   = PADDLE_ROW;
-    ppaddle->size = INIT_SIZE_PADDLE;
-    ppaddle->dx  = 0;
-
-    balls[0].x      = ppaddle->x;	//SETS MAIN BALL
-    balls[0].y      = ppaddle->y - 1;
-    balls[0].dx     = 0;
-    balls[0].dy     = 0;
-    balls[0].hp     = LIFE_BALL;
-    balls[0].speed  = plevel->speed_mult;
-    balls[0].active = 1;
-}
 
 void level_init (level_t *plevel)
 {
@@ -296,47 +279,4 @@ void set_brick(brick_t *brick, int type)
 }
 
 
-void update_paddle(paddle_t *ppaddle, char key)
-{
-    if (key==LEFT)		//ALLOWS TO MOVE THE PADDLE
-        {ppaddle->dx = -1;}
-    else if (key == RIGHT)
-    	{ppaddle->dx = 1;}
-    else
-        {ppaddle->dx = 0;}
 
-    ppaddle->x += ppaddle->dx;
-
-    int half = ppaddle->size / 2; //LIMIT IN BORDERS
-    if (ppaddle->x - half < 0)
-    {
-    	ppaddle->x = half;
-    }
-
-    if (ppaddle->x + half >= GAME_COLS)
-    {
-    	ppaddle->x = GAME_COLS - 1 - half;
-    }
-}
-
-void update_ball(ball_t *pball)
-{
-    pball->x += pball->dx;	//MOVEMENT
-    pball->y += pball->dy;
-
-    //LEFT AND RIGHT BOUNCE WITH WALLS
-    if (pball->x <= 0)
-    {
-    	pball->x = 0;
-    	pball->dx =  1;
-    }
-    if (pball->x >= GAME_COLS - 1)
-    {
-    	pball->x = GAME_COLS - 1;
-    	pball->dx = -1;
-    }
-
-    // UP BOUNCE WITH WALLS
-    if (pball->y <= 0)        { pball->y = 0;         pball->dy =  1; }
-
-}

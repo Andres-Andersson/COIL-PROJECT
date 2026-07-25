@@ -97,7 +97,7 @@ void update_capsules(capsule_t capsules[], paddle_t *ppaddle, ball_t balls[], po
     }
 }
 
-void update_powers(powers_t active_powers[], paddle_t *ppaddle, ball_t balls[])
+void update_powers(powers_t active_powers[], paddle_t *ppaddle, ball_t balls[]) //TIME COUNTDOWN FOR POWERS
 {
     if (active_powers[0].duration > 0)
     {

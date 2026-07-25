@@ -32,7 +32,7 @@ typedef struct
 	int score;
 	char key;
 }brick_t;
-//TYPE 1= COMMON
+
 
 typedef struct 
 {
@@ -40,7 +40,7 @@ typedef struct
 	int y;
 	int dx;
 	int dy;
-	int hp; //LIFE_MBALL for the main, LIFE_E_BALL for the extras.
+	int hp;
 	float speed;
 	int active;
 	

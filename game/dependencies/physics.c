@@ -186,6 +186,10 @@ void update_ball(ball_t *pball)
     }
 
     // UP BOUNCE WITH WALLS
-    if (pball->y <= 0)        { pball->y = 0;         pball->dy =  1; }
+    if (pball->y <= 0)
+    {
+    	pball->y = 0;
+    	pball->dy =  1;
+    }
 
 }

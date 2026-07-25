@@ -20,23 +20,23 @@ typedef enum {
     WIN_PAUSED,
     WIN_GAME_PLAYFIELD,
     WIN_LEADERBOARD
-} WindowID;
+} WindowID; //Window's ids
 
 #define W_MAX 4
 
 typedef enum{
-	NONE,
-	PLAY,
-	QUIT,
-	LEADERBOARD,
-	LEFT_,
-	RIGHT_,
-	CHEAT_CLEAR_BRICKS_,
-	CHEAT_SPAWN_POWERS_
+	ACTION_NONE,
+	PLAY_ACTION,
+	QUIT_PAUSE,
+	LEADERBOARD_ACTION,
+	LEFT,
+	RIGHT,
+	CHEAT_CLEAR_BRICKS,
+	CHEAT_SPAWN_POWERS,
 
-}MenuAction;
+}GameAction; //Keys
 
-MenuAction render_get_action(WindowID win_id);
+GameAction render_get_action(WindowID win_id);
 
 void render_create_win(WindowID, int height, int width, int i, int j);
 void render_destroy_win(WindowID);
@@ -54,7 +54,7 @@ void clean_buffer();
 #define SCREEN_START_Y 0
 #define SCREEN_START_X 0
 
-typedef enum{
+typedef enum{ //Color IDS
 	BLACK,
 	BLUE,
 	GREEN,

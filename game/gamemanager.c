@@ -4,7 +4,7 @@
 
 #include "dependencies/physics.h"
 #include "dependencies/powers.h"
-#include "dependencies/gamerender.h"
+#include "../render/gamerender/gamerender.h"
 #include "dependencies/levelmanager.h"
 
 static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_t *plevel, capsule_t capsules[], powers_t active_powers[]);
@@ -51,9 +51,9 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
 
 
         if (key==LEFT)//ALLOWS TO MOVE THE PADDLE
-            {ppaddle->dx = -1;}
+            {ppaddle->dx = -2;}
         else if (key == RIGHT)
-        	{ppaddle->dx = 1;}
+        	{ppaddle->dx = 2;}
         else
             {ppaddle->dx = 0;}
 
@@ -155,6 +155,7 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
 
         render_game(ppaddle, balls, bricks, plevel, capsules);
         usleep(SLEEP_TIME);
+
     }
 
     end_game_render();

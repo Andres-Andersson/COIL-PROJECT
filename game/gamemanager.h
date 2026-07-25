@@ -6,5 +6,16 @@ int play_game(int score);
 #define SPEED_MULT 0.05f
 #define SCORE_MULT 0.5f
 
+typedef enum{
+	ACTION_NONE,
+	PLAY_ACTION,
+	QUIT_PAUSE,
+	LEADERBOARD_ACTION,
+	LEFT,
+	RIGHT,
+	CHEAT_CLEAR_BRICKS,
+	CHEAT_SPAWN_POWERS,
+
+}GameAction; //Keys (game manager interpretation)
 
 #endif /* GAMEMANAGER_H_ */

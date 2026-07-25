@@ -11,17 +11,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-typedef enum{
-	ACTION_NONE,
-	PLAY_ACTION,
-	QUIT_PAUSE,
-	LEADERBOARD_ACTION,
-	LEFT,
-	RIGHT,
-	CHEAT_CLEAR_BRICKS,
-	CHEAT_SPAWN_POWERS,
 
-}GameAction;
 
 typedef struct 
 {

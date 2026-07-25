@@ -1,8 +1,8 @@
 #include "datarender.h"
-#include "../../render/render.h"
+#include "../ncurses/render.h"
 
 
-void init_leaderboard(){
+void init_leaderboard(){ //Creates the leader board
 	render_create_win(WIN_LEADERBOARD, L_BOARD_HEIGHT, L_BOARD_WIDTH, SCREEN_START_Y, SCREEN_START_X);
 
 	print_str(WIN_LEADERBOARD, L1, GET_CENTER_TEXT(L_BOARD_WIDTH, "ALL-TIME HIGH SCORES"), GREEN,"ALL-TIME HIGH SCORES");
@@ -21,7 +21,7 @@ void show_top_scores(Player_t* topscores, int player_count){
 	int score;
 	int offset = L2;
 
-	for (int j = 1; j<(L_BOARD_WIDTH-2);j++){
+	for (int j = 1; j<(L_BOARD_WIDTH-2);j++){ //Top line separation
 		print_char(WIN_LEADERBOARD, offset, j, WHITE, '_');
 	}
 	offset++;
@@ -31,7 +31,7 @@ void show_top_scores(Player_t* topscores, int player_count){
 		username = topscores[i].username;
 		score = topscores[i].score;
 
-		switch(i){
+		switch(i){ //Different colors depending on the player position
 
 		case 0:
 			print_str(WIN_LEADERBOARD, offset, L_LEFT, YELLOW, "%d. %s:			%d",i+1,username, score);
@@ -50,7 +50,7 @@ void show_top_scores(Player_t* topscores, int player_count){
 		}
 
 		offset++;
-		if (i != NTOP-1){
+		if (i != NTOP-1){ //line separation
 			for (int j = 1; j<(L_BOARD_WIDTH-2);j++){
 				print_char(WIN_LEADERBOARD, offset, j, WHITE, '_');
 			}
@@ -59,10 +59,10 @@ void show_top_scores(Player_t* topscores, int player_count){
 		offset++;
 	}
 
-	render_refresh_win(WIN_LEADERBOARD);
+	render_refresh_win(WIN_LEADERBOARD); //Displays the changes
 }
 
 
-void close_leaderboard(){
+void close_leaderboard(){ //Closes the leader board safely
 	render_destroy_win(WIN_LEADERBOARD);
 }

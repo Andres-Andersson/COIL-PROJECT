@@ -1,22 +1,21 @@
 #include "gamerender.h"
-#include "../../render/render.h"
-#include "entities.h"
+#include "../ncurses/render.h"
+#include "../../game/dependencies/entities.h"
 
-#include <string.h>
 
-void init_game_render(){
+void init_game_render(){ //Creates a new window
 	render_create_win(WIN_GAME_PLAYFIELD, GAME_ROWS+3, GAME_COLS+2, PLAYFLEID_Y, PLAYFLEID_X);
 }
 
-void end_game_render(){
+void end_game_render(){ //Destroy the created window
 	render_destroy_win(WIN_GAME_PLAYFIELD);
 }
 
-char get_key(){
+char get_key(){ //Reads the key pressed
 	return render_get_action(WIN_GAME_PLAYFIELD);;
 }
 
-void instructions(){
+void instructions(){ //Displays the game controls to the user
 
 	render_create_win(WIN_PAUSED, GAME_ROWS+4, GAME_COLS+2, PLAYFLEID_Y, PLAYFLEID_X);
 
@@ -34,11 +33,11 @@ void instructions(){
 	render_destroy_win(WIN_PAUSED);
 }
 
-void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *plevel, capsule_t capsules[])
+void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *plevel, capsule_t capsules[]) //Renders the entire grid
 {
 	render_clear_win(WIN_GAME_PLAYFIELD);
     // Bricks
-    for (int i = 0; i < BR_BOARD; i++)
+    for (int i = 0; i < BR_BOARD; i++) //Goes brick by brick and it displays them if their health is greater than zero
     {
         if (bricks[i].hp > 0)
         {
@@ -49,7 +48,7 @@ void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *p
 
     // BALLS
     int b;
-    for (b = 0; b < MAX_BALLS; b++)
+    for (b = 0; b < MAX_BALLS; b++) //Only displays active balls (consider the power ups)
     {
         if (balls[b].active)
         {
@@ -78,9 +77,10 @@ void render_game(paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *p
            }
        }
        render_refresh_win(WIN_GAME_PLAYFIELD);
+       clean_buffer();
 }
 
-int game_paused(){
+int game_paused(){ //Pauses the game a shows a paused window in front of the game's window
 	render_create_win(WIN_PAUSED, GAME_ROWS+4, GAME_COLS+2, PLAYFLEID_Y, PLAYFLEID_X);
 
 	print_str(WIN_PAUSED, I1, GET_CENTER_TEXT(GAME_COLS+2, "GAME PAUSED"), GREEN, "GAME PAUSED");
@@ -93,7 +93,7 @@ int game_paused(){
 
 	int selection = 0;
 
-	while((selection!=PLAY_ACTION)&&(selection!=QUIT_PAUSE)){
+	while((selection!=PLAY_ACTION)&&(selection!=QUIT_PAUSE)){ //Depending on the selection, game manager will either resume or quit the run.
 		selection = render_get_action(WIN_PAUSED);
 		usleep(WAIT_ACTION_PAUSE);
 	}
@@ -102,10 +102,10 @@ int game_paused(){
 	return selection;
 }
 
-void resume_game(int selection, paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *plevel, capsule_t capsules[]){
+void resume_game(int selection, paddle_t *ppaddle, ball_t balls[], brick_t bricks[], level_t *plevel, capsule_t capsules[]){ //Gives the user feedback
 	print_str(WIN_PAUSED, I1, GET_CENTER_TEXT(GAME_COLS+2, "GAME PAUSED"), GREEN, "GAME PAUSED");
 
-	if (selection==PLAY){
+	if (selection==PLAY_ACTION){ //Resumes the game
 
 		int i;
 
@@ -115,7 +115,7 @@ void resume_game(int selection, paddle_t *ppaddle, ball_t balls[], brick_t brick
 		usleep(RESUME_WAIT);
 		render_destroy_win(WIN_PAUSED);
 
-			for (i=0;i<COUNTDOWN;i++){
+			for (i=0;i<COUNTDOWN;i++){ //Brief count down
 
 				render_game(ppaddle, balls, bricks, plevel, capsules);
 				print_str(WIN_GAME_PLAYFIELD, (GAME_ROWS/2)+5, GAME_COLS/2,YELLOW,"%d",(COUNTDOWN-i));
@@ -123,12 +123,12 @@ void resume_game(int selection, paddle_t *ppaddle, ball_t balls[], brick_t brick
 				usleep(SECOND);
 			}
 	}
-	else{
+	else{ //The user quitted the game
 		print_str(WIN_PAUSED, I2, GET_CENTER_TEXT(GAME_COLS+2, "RESUME [SPACE]"), RED, "RESUME [SPACE]");
 		print_str(WIN_PAUSED, I3, GET_CENTER_TEXT(GAME_COLS+2, "QUIT [Q]"), YELLOW, "QUIT [Q]");
 		render_refresh_win(WIN_PAUSED);
 		usleep(RESUME_WAIT);
 		render_destroy_win(WIN_PAUSED);
 	}
-
+	clean_buffer(); //Avoids any wrong keys interpretations if the user pressed anything during the game pause.
 }

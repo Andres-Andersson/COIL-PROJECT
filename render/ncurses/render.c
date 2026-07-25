@@ -4,7 +4,7 @@ static int initialized = FALSE;
 
 static WINDOW* windows[W_MAX];
 
-void init_ncurses(){
+void init_ncurses(){ //Inits NCURSES
 
 	if (initialized){
 		return;
@@ -18,7 +18,7 @@ void init_ncurses(){
 		curs_set(0);
 
 		if (has_colors()) { //Init colors
-			start_color();
+			start_color(); //Each color has an id
 
 			init_pair(BLACK, COLOR_BLACK,COLOR_WHITE);
 			init_pair(BLUE, COLOR_BLUE,COLOR_BLACK);
@@ -125,12 +125,12 @@ void print_char(WindowID win_id, int i, int j, int color_id, char character) {
     wattroff(win, COLOR_PAIR(color_id));
 }
 
-void render_refresh_win(WindowID win_id) {
+void render_refresh_win(WindowID win_id) { //Displays what was drawn on the buffer
     if ((win_id >= W_MAX) || (win_id < 0) || (windows[win_id] == NULL)) return;
     wrefresh(windows[win_id]);
 }
 
-void render_clear_win(WindowID win_id) {
+void render_clear_win(WindowID win_id) { //Clears the specified window
     if ((win_id >= W_MAX) || (win_id < 0) || (windows[win_id] == NULL)){
     	return;
     }
@@ -138,7 +138,7 @@ void render_clear_win(WindowID win_id) {
     box(windows[win_id],0,0);
 }
 
-void clean_buffer(){
+void clean_buffer(){ //Discards all the keys that were pressed but not interpreted
 	flushinp();
 	int ch;
 	    nodelay(stdscr, TRUE);
@@ -146,15 +146,15 @@ void clean_buffer(){
 	    }
 }
 
-MenuAction render_get_action(WindowID win_id){
+GameAction render_get_action(WindowID win_id){ //Reads if a specified key was pressed and it assigns it a certain value
 	if ((win_id >= W_MAX) || (win_id < 0) || (windows[win_id] == NULL)) {
-	        return NONE;
+	        return ACTION_NONE;
 	    }
 
 	int ch = wgetch(windows[win_id]);
 
 	if (ch == ERR) {
-	        return NONE;
+	        return ACTION_NONE;
 	    }
 
 	switch(ch){
@@ -162,30 +162,30 @@ MenuAction render_get_action(WindowID win_id){
 	case '\n':
 	case KEY_ENTER:
 	case ' ':
-		return PLAY;
+		return PLAY_ACTION;
 
 	case 'q':
 	case 'Q':
-		return QUIT;
+		return QUIT_PAUSE;
 
 	case 'l':
 	case 'L':
-		return LEADERBOARD;
+		return LEADERBOARD_ACTION;
 	case 'a':
 	case 'A':
-		return LEFT_;
+		return LEFT;
 	case 'd':
 	case 'D':
-		return RIGHT_;
+		return RIGHT;
 	case 'c':
 	case 'C':
-		return CHEAT_CLEAR_BRICKS_;
+		return CHEAT_CLEAR_BRICKS;
 	case 'v':
 	case 'V':
-		return CHEAT_SPAWN_POWERS_;
+		return CHEAT_SPAWN_POWERS;
 
 	default:
-		return NONE;
+		return ACTION_NONE;
 	}
 }
 

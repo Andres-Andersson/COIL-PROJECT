@@ -1,13 +1,13 @@
 #include "menu.h"
 
-#include "../render/render.h"
+#include "../render/ncurses/render.h"
 
 static void draw_menu(char*username, int score, int selection);
 static void animate_rocket(int rocket_y, int rocket_x, int frame_count);
 static void animate_stars(Star_t* sky, int frame_count);
 
 
-int open_menu(char*username, int score){
+int open_menu(char*username, int score){ //Opens the main menu
 
 	int menu_running = TRUE;
 	int frames = 0;
@@ -32,23 +32,23 @@ int open_menu(char*username, int score){
 
 
 
-	while(menu_running){
+	while(menu_running){ //Menu loop, waits until a decision is made
 
 	if (selection==-1){
 
 		if (cool_down<=0){
-			MenuAction action = render_get_action(WIN_MENU);
+			GameAction action = render_get_action(WIN_MENU);
 				switch(action){
-					case QUIT:
-						selection = QUIT;
+					case QUIT_PAUSE:
+						selection = QUIT_PAUSE;
 						cool_down = COOL_DOWN_WAIT;
 						break;
-					case PLAY:
-						selection = PLAY;
+					case PLAY_ACTION:
+						selection = PLAY_ACTION;
 						cool_down = COOL_DOWN_WAIT;
 						break;
-					case LEADERBOARD:
-						selection = LEADERBOARD;
+					case LEADERBOARD_ACTION:
+						selection = LEADERBOARD_ACTION;
 						cool_down = COOL_DOWN_WAIT;
 						break;
 					default:
@@ -62,9 +62,9 @@ int open_menu(char*username, int score){
 		}
 	}
 
-		if (frames>=ROCKET_ANIM_FREQ){
+		if (frames>=ROCKET_ANIM_FREQ){ //Animates the rocket
 			rocket_y--;
-			if (rocket_y == 0){
+			if (rocket_y == 0){ //Respawns the rocket at the bottom of the screen, in a random X positions
 				rocket_y = ROCKET_Y;
 				rocket_x = ROCKET_X+rand()%(MENU_WIDTH-OFFSET);
 			}
@@ -86,7 +86,7 @@ int open_menu(char*username, int score){
 
 
 
-	if ((PLAY<=selection) && (selection<=LEADERBOARD)){
+	if ((PLAY_ACTION<=selection) && (selection<=LEADERBOARD_ACTION)){ //When a choice is made, it breaks from the loop and notifies main
 			clean_buffer();
 			usleep(MENU_WAIT2);
 			menu_running = FALSE;
@@ -98,32 +98,32 @@ int open_menu(char*username, int score){
 	return selection;
 }
 
-void end_program(){
+void end_program(){ //Ends the menu render
 	end_ncurses();
 }
 
 
-static void draw_menu(char*username, int score, int selection){
+static void draw_menu(char*username, int score, int selection){ //Private function that gives feedback to the user when a decision was made.
 
 		print_str(WIN_MENU, M1, GET_CENTER_TEXT(MENU_WIDTH, "ARKANOID"), GREEN, "ARKANOID");
 		print_str(WIN_MENU, M5, MLEFT, CYAN, "Username: %s", username);
 		print_str(WIN_MENU, M6, MLEFT, RED, "Top score: %d", score);
 
 
-        if (selection == PLAY){
+        if (selection == PLAY_ACTION){
        	 print_str(WIN_MENU, M2, MLEFT, SELECTION, "PLAY [SPACE]");
        	 print_str(WIN_MENU, M3, MLEFT, WHITE, "VIEW LEADERBOARD [L]");
        	 print_str(WIN_MENU, M4, MLEFT, WHITE, "QUIT [Q]");
 
 		}
-        else if (selection == QUIT){
+        else if (selection == QUIT_PAUSE){
        	 print_str(WIN_MENU, M2, MLEFT, WHITE, "PLAY [SPACE]");
        	 print_str(WIN_MENU, M3, MLEFT, WHITE, "VIEW LEADERBOARD [L]");
        	 print_str(WIN_MENU, M4, MLEFT, SELECTION, "QUIT [Q]");
 
         }
 
-        else if (selection == LEADERBOARD){
+        else if (selection == LEADERBOARD_ACTION){
        	 print_str(WIN_MENU, M2, MLEFT, WHITE, "PLAY [SPACE]");
        	 print_str(WIN_MENU, M3, MLEFT, SELECTION, "VIEW LEADERBOARD [L]");
        	 print_str(WIN_MENU, M4, MLEFT, WHITE, "QUIT [Q]");
@@ -137,7 +137,7 @@ static void draw_menu(char*username, int score, int selection){
 
 }
 
-static void animate_rocket(int rocket_y, int rocket_x, int frame_count){
+static void animate_rocket(int rocket_y, int rocket_x, int frame_count){ //Rocket animation with different flame colors.
 	print_str(WIN_MENU, rocket_y,	rocket_x, CYAN, " /^\\ ");
 	print_str(WIN_MENU, rocket_y+1,	rocket_x, CYAN, " |X| ");
 
@@ -156,7 +156,7 @@ static void animate_rocket(int rocket_y, int rocket_x, int frame_count){
 	}
 }
 
-static void animate_stars(Star_t* sky, int frame_count){
+static void animate_stars(Star_t* sky, int frame_count){ //Star animation
     for (int i = 0; i < MAX_STARS; i++){
         if (frame_count % STAR_ANIM_FREQ == 0) {
             sky[i].y += sky[i].speed; //Stars fall at different speeds

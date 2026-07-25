@@ -1,4 +1,4 @@
-#include "data_render/datarender.h"
+#include "../render/data_render/datarender.h"
 #include "data.h"
 
 
@@ -11,7 +11,7 @@ static void save_new_score(int round_score, char* username);
 
 
 
-static int validate_username(char*username){
+static int validate_username(char*username){ //If the username passed the length filter, we will make sure it only contains alpha characters
 	int length = strlen(username);
 
 	for (int i=0; i<length;i++){
@@ -19,8 +19,8 @@ static int validate_username(char*username){
 		if (!isalpha(letter)){
 			return FALSE;
 		}
-	}
-	 //If the username passed the filter, we know is valid.
+	} //It passed all the filters, user name is valid
+
 	return TRUE;
 
 }
@@ -76,9 +76,9 @@ int get_username(char*username){
 
 		while(!valid_user); //We will prompt the user again until the username becomes valid
 
-		score = user_exists(username);
+		score = user_exists(username); //Searches in the file system if the username existed
 
-		if (score<DEFAULT_SCORE){
+		if (score<DEFAULT_SCORE){ // If there was no username with that name, we will create a brand new username and assign it a default score
 			register_new_user(username);
 			return DEFAULT_SCORE;
 		}
@@ -102,13 +102,13 @@ static int user_exists(const char*username_to_find){
 		char current_name[LINE_SIZE] = {0}; //It will check line by line if a user with the same name exists
 		int current_score;
 
-		while(fscanf(file, "%s\t%d", current_name, &current_score) == 2){
+		while(fscanf(file, "%s\t%d", current_name, &current_score) == 2){ //It found the specified username
 			if (strcmp(current_name,username_to_find)){
 				continue;
 			}
 			else{
 				fclose(file);
-				return current_score;
+				return current_score; //We let the others now which was their high score.
 
 			}
 
@@ -133,7 +133,7 @@ static void register_new_user(const char*username){ //If the user does not exist
 	}
 }
 
-void open_leaderboard(){
+void open_leaderboard(){ //Opens the leadearboard for a specified time, then it closes it
 	init_leaderboard();
 	get_top_scores_list();
 	usleep(LEADERBOARD_WAIT_TIME);
@@ -141,7 +141,7 @@ void open_leaderboard(){
 
 }
 
-static void get_top_scores_list(){
+static void get_top_scores_list(){ //Gets the top x highest scores
 
 	int capacity = NTOP;
 	int player_count= 0;
@@ -152,17 +152,17 @@ static void get_top_scores_list(){
 		return;
 	}
 
-	Player_t* player_list = malloc(NTOP*sizeof(Player_t));
+	Player_t* player_list = malloc(NTOP*sizeof(Player_t)); //We save space in the heap to user qsort to order the array
 
 	while(fscanf(file, "%s\t%d", player_list[player_count].username, &player_list[player_count].score) == 2){
 		player_count++;
 
-		if (player_count>=capacity){
+		if (player_count>=capacity){ //Expand the heap capacity if there are more users than the reserved memory space
 			capacity *= MULT;
 
-			Player_t* temp = realloc(player_list, capacity*sizeof(Player_t));
+			Player_t* temp = realloc(player_list, capacity*sizeof(Player_t)); //We create a temporary pointer in realloc fails
 
-			if (temp == NULL){
+			if (temp == NULL){ //Temp pointer validation
 				free(player_list);
 				fclose(file);
 				return;
@@ -173,7 +173,7 @@ static void get_top_scores_list(){
 
 	fclose(file);
 
-	if (player_count>0){
+	if (player_count>0){ //If there are registered players, qsort will order the array
 		qsort(player_list, player_count, sizeof(Player_t), compare_players);
 		show_top_scores(player_list, player_count);
 	}
@@ -181,21 +181,21 @@ static void get_top_scores_list(){
 }
 
 
-static int compare_players(const void*p1, const void* p2){
+static int compare_players(const void*p1, const void* p2){ //qsort compare function
 	return (((Player_t*)p2)->score)- (((Player_t*)p1)->score);
 }
 
-void check_score(char* username, int round_score, int saved_score){
+void check_score(char* username, int round_score, int saved_score){ //Compares the round score to the saved score.
 
-	if(round_score> saved_score){
+	if(round_score> saved_score){ //If player beat its record, we need to update it
 		save_new_score(round_score, username);
 	}
 }
 
-static void save_new_score(int round_score, char* username){
+static void save_new_score(int round_score, char* username){ //We save the player's new record
 	FILE * original = fopen("scores.txt", "r");
 
-	if ((original == NULL)||(username==NULL)){
+	if ((original == NULL)||(username==NULL)){//Validation
 		return;
 	}
 
@@ -211,7 +211,7 @@ static void save_new_score(int round_score, char* username){
 
 		while(fscanf(original, "%s\t%d", current_name, &current_score) == 2){ //Reads line by line and if it reads the username with the new high score it will save it in the temp file
 			if (strcmp(current_name,username)){
-				fprintf(temp,"%s\t%d\n",current_name,current_score);
+				fprintf(temp,"%s\t%d\n",current_name,current_score); //Only changes that player's score
 			}
 			else{
 				fprintf(temp,"%s\t%d\n",username,round_score);
@@ -221,8 +221,8 @@ static void save_new_score(int round_score, char* username){
 		fclose(temp);
 		fclose(original);
 
-		remove("scores.txt");
-		rename("temp.txt", "scores.txt");
+		remove("scores.txt"); //Deletes the previous score file.
+		rename("temp.txt", "scores.txt");//Temp becomes the new official file
 
 }
 

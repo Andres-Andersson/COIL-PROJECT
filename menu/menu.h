@@ -10,15 +10,8 @@
 int open_menu(char*, int score);
 void end_program();
 
-typedef enum{
-	NONE_,
-	PLAY_,
-	QUIT_,
-	LEADERBOARD_,
-}MenuSelection;
-
+//Wait times
 #define US_TO_SECOND 1000000
-
 #define FPS 70
 #define MENU_WAIT1 (US_TO_SECOND/FPS)
 #define MENU_WAIT2 400000
@@ -27,10 +20,11 @@ typedef enum{
 #define ROCKET_ANIM_FREQ 9 //The higher the number the less frequent it will change
 #define STAR_ANIM_FREQ 12
 
+//Menu dimensions
 #define MENU_HEIGHT 23
 #define MENU_WIDTH 79
 
-
+//Offsets
 #define M_SPACING 3
 
 #define M1 1
@@ -40,12 +34,15 @@ typedef enum{
 #define M5 MENU_HEIGHT-3
 #define M6 MENU_HEIGHT-2
 
+#define MLEFT 1
+
+//Rocket configurations
 #define ROCKET_Y 15
 #define ROCKET_X 1
 #define OFFSET 22
 
-#define MLEFT 1
 
+//Star configurations
 #define MAX_STARS 15
 #define MAX_SPEED 3
 
@@ -53,8 +50,6 @@ typedef struct {
     int x;
     int y;
     int speed;
-} Star_t;
-
-
+} Star_t; //Star specifications
 
 #endif /* MENU_H_ */

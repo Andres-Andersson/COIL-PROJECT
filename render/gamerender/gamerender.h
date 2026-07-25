@@ -8,6 +8,7 @@
 #ifndef GAMERENDER_H_
 #define GAMERENDER_H_
 
+//Text coordinates
 #define PLAYFLEID_X 0
 #define PLAYFLEID_Y 0
 
@@ -18,7 +19,7 @@
 #define I2 (I1+OFFSET_INSTRUCT)
 #define I3 (I2+OFFSET_INSTRUCT)
 
-#define INIT_WAIT 2000000
+#define INIT_WAIT 2000000 //Wait times
 #define WAIT_ACTION_PAUSE 1000
 #define RESUME_WAIT 500000
 
@@ -27,7 +28,7 @@
 #define COUNTDOWN 3
 
 
-#include "entities.h"
+#include "../../game/dependencies/entities.h"
 
 int game_paused();
 

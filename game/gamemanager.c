@@ -51,9 +51,9 @@ static int game_loop(ball_t balls[], paddle_t *ppaddle, brick_t bricks[], level_
 
 
         if (key==LEFT)//ALLOWS TO MOVE THE PADDLE
-            {ppaddle->dx = -2;}
+            {ppaddle->dx = -PADDLE_DISPLACEMENT;}
         else if (key == RIGHT)
-        	{ppaddle->dx = 2;}
+        	{ppaddle->dx = PADDLE_DISPLACEMENT;}
         else
             {ppaddle->dx = 0;}
 

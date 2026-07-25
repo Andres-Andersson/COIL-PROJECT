@@ -19,7 +19,7 @@
 #define I2 (I1+OFFSET_INSTRUCT)
 #define I3 (I2+OFFSET_INSTRUCT)
 
-#define INIT_WAIT 2000000 //Wait times
+#define INIT_WAIT 2500000 //Wait times
 #define WAIT_ACTION_PAUSE 1000
 #define RESUME_WAIT 500000
 

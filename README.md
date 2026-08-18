@@ -32,14 +32,23 @@ To pause/resume/play (SPACE BAR)
   View leaderboard (L)
   
 
-7. Características Implementadas (Features & Modos de Juego)
+# Aditional game implementations
 
-8. Decisiones de Diseño y Manejo de Recursos (Importante para la Defensa)
+- Menu: Be able to pause, resume or restart game. After loosing it is possible to start playing again without exiting the program.
+- Top Score: Sorted list of best scores (TOP 10) saved even after closing the game (using files).
+- Advanced Score: Advance score calculation dependent on ball speed.
+- Advanced Bricks: Bricks with more than 1 life (destroyed after being hit several times). Different symbol for each type of bricks.
+- Advanced and Random Pattern: Fixed multiple-row bricks pattern for the first four levels, on the fifth, the brick pattern is randomized.
+- Advanced Angle: Ball bounces with a different angle depending where it hits the paddle, like the original game. Narrow angle in the center, wider angle in the edges.
+- Capsules: Some bricks release capsules that bestow various power-ups when caught. We have created four different power: increase on the length of the paddle, temporary slowing ball slow-down, extra ball spawn and multiple ball spawn.
+- Animations: Motion graphics in the game menu, stars fall randomly and a rocket propels itself indefinitely.
 
-Un apartado breve donde expliquen decisiones técnicas clave:
+# Game design decisions and resource management
 
-    Manejo de memoria: "Toda la memoria dinámica asignada para los niveles/entidades se libera al finalizar la partida o cerrar el juego mediante la función end_program()."
+Modular arquitecture: the game manager, data manager and the NCRUSES rendering modules work independently each one of them worrying about their own responsibilities.
 
-    Mapeo de archivos/Persistencia: Cómo guardan las puntuaciones (ej. scores.dat).
+Memory management: all the dynamic memory is freed before exiting the game (avoiding memory leeks).
 
-    Frame rate / Control de tiempo: Uso de usleep() ajustado a 40 FPS para controlar la velocidad del juego de manera homogénea.
+File system: all the scores are saved in scores.txt. Where a user beat its previous record, a temp file is created copying all the previous data and replacing the new record with the previous. scores.txt is destroyed and the temp file becomes the new scores.txt.
+
+Frame rate control: usleep() usage adjusted to the specific FPS to control the game speed without jeopardizing the game-look.

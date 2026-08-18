@@ -45,7 +45,7 @@ To pause/resume/play (SPACE BAR)
 
 # Game design decisions and resource management
 
-Modular arquitecture: the game manager, data manager and the NCRUSES rendering modules work independently each one of them worrying about their own responsibilities.
+Modular architecture: the game manager, data manager and the NCURSES rendering modules work independently each one of them worrying about their own responsibilities.
 
 Memory management: all the dynamic memory is freed before exiting the game (avoiding memory leeks).
 

@@ -23,10 +23,14 @@ sudo apt install build-essential libncurses5-dev libncursesw5-dev
 
 # Game controls:
 
-  To move the paddle A (LEFT), D (RIGHT)
-  To pause/resume/play (SPACE BAR)
+To move the paddle A (LEFT), D (RIGHT)
+
+To pause/resume/play (SPACE BAR)
+
   To quit (Q)
+  
   View leaderboard (L)
+  
 
 7. Características Implementadas (Features & Modos de Juego)
 

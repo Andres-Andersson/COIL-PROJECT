@@ -19,6 +19,7 @@ This game is intended to run ONLY in Linux. To play this game the requirements a
 # To install NCURSES open the Linux terminal and copy and paste these commands:
 
 sudo apt update
+
 sudo apt install build-essential libncurses5-dev libncursesw5-dev
 
 # Game controls:

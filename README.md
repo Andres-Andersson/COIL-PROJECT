@@ -1,4 +1,4 @@
-## ARKANOID IN C COIL-PROJECT GROUP 1 2026
+## ARKANOID IN C COIL-PROJECT (ITBA - BHT) GROUP 1 2026
 
 # Project name: ARKANOID IN C EDITION: A BLOCKY ADVENTURE
 
@@ -13,7 +13,7 @@ In this ARKANOID version, the objective is to hit the ball upward with a paddle 
 This game is intended to run ONLY in Linux. To play this game the requirements are:
 
 1 Using the gcc C compiler.
-2 Using makefile
+2 Using the provided makefile
 3 Installing the external libraries (NCURSES)
 
 # To install NCURSES open the Linux terminal and copy and paste these commands:
@@ -21,6 +21,12 @@ This game is intended to run ONLY in Linux. To play this game the requirements a
 sudo apt update
 
 sudo apt install build-essential libncurses5-dev libncursesw5-dev
+
+#Instructions to create the executable file once NCURSES is installed:
+
+1. Open the terminal inside the folder were 'main.c' and the makefile are located
+2. Execute the 'make' command to build the executable. Additionally, run the 'clear' command to remove all the .o files.
+4. Run the executable with the command ./ARKANOID-COIL
 
 # Game controls:
 

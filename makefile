@@ -46,7 +46,3 @@ render/gamerender/gamerender.o: render/gamerender/gamerender.c render/gamerender
 
 render/ncurses/render.o: render/ncurses/render.c render/ncurses/render.h
 	${CC} render/ncurses/render.c -c ${OPTIONS} -o render/ncurses/render.o
-
-clean:
-	rm *.o ARKANOID-COIL
-

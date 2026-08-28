@@ -25,7 +25,7 @@ sudo apt install build-essential libncurses5-dev libncursesw5-dev
 #Instructions to create the executable file once NCURSES is installed:
 
 1. Open the terminal inside the folder were 'main.c' and the makefile are located
-2. Execute the 'make' command to build the executable. Additionally, run the 'clear' command to remove all the .o files.
+2. Execute the 'make' command to build the executable.
 4. Run the executable with the command ./ARKANOID-COIL
 
 # Game controls:

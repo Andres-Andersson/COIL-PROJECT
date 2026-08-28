@@ -13,8 +13,8 @@ OBJS := main.o \
         render/gamerender/gamerender.o \
         render/ncurses/render.o
 
-arkanoid: ${OBJS}
-	${CC} ${OBJS} ${OPTIONS} ${LDFLAGS} -o arkanoid
+ARKANOID-COIL: ${OBJS}
+	${CC} ${OBJS} ${OPTIONS} ${LDFLAGS} -o ARKANOID-COIL
 
 
 main.o: main.c
@@ -48,5 +48,5 @@ render/ncurses/render.o: render/ncurses/render.c render/ncurses/render.h
 	${CC} render/ncurses/render.c -c ${OPTIONS} -o render/ncurses/render.o
 
 clean:
-	rm *.o arkanoid
-	rm *.o arkanoid
+	rm *.o ARKANOID-COIL
+

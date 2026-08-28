@@ -12,9 +12,9 @@ In this ARKANOID version, the objective is to hit the ball upward with a paddle 
 # GAME REQUIREMENTS
 This game is intended to run ONLY in Linux. To play this game the requirements are:
 
-1 Using the gcc C compiler.
-2 Using the provided makefile
-3 Installing the external libraries (NCURSES)
+1. Using the gcc C compiler.
+2. Using the provided makefile
+3. Installing the external libraries (NCURSES)
 
 # To install NCURSES open the Linux terminal and copy and paste these commands:
 
